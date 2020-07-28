@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity() {
 
         rootLogger
             .e("Test")
+            .exception(Exception("Error", Exception("Cause")))
             .message("Basic error message")
 
         rootLogger
