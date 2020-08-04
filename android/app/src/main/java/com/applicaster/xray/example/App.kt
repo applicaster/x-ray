@@ -12,6 +12,7 @@ import com.applicaster.xray.core.LogLevel
 import com.applicaster.xray.core.Logger
 import com.applicaster.xray.crashreporter.Reporting
 import com.applicaster.xray.crashreporter.SendActivity
+import com.applicaster.xray.example.sinks.ElasticSink
 import com.applicaster.xray.example.sinks.InMemoryLogSink
 import com.applicaster.xray.example.ui.MainActivity
 import com.applicaster.xray.formatters.message.reflactionformatter.ReflectionMessageFormatter
@@ -75,6 +76,7 @@ class App : Application() {
                 memory_sink_name,
                 InMemoryLogSink()
             )
+            .addSink("elastic", ElasticSink())
             .addSink("default_log_sink", fileLogSink)
             .addSink("error_log_sink", errorFileLogSink)
             .setFilter("error_log_sink", "", DefaultSinkFilter(LogLevel.error))

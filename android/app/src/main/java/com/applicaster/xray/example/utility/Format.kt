@@ -9,3 +9,7 @@ private object GsonHolder {
 
 fun Event.format(): CharSequence? =
     GsonHolder.gson.toJson(this)
+
+// actually same as above
+fun Event.formatJSON(): CharSequence? =
+    GsonHolder.gson.toJson(this)
