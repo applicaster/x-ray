@@ -22,7 +22,7 @@ public class PackageFileLogSink implements ISink {
     private static final String TAG = "FileLogSink";
     private final Context ctx;
     private final String fileName;
-    private final IEventFormatter formatter = new PlainTextEventFormatter();
+    private IEventFormatter formatter = new PlainTextEventFormatter();
 
     public PackageFileLogSink(@NonNull Context ctx,
                               @NonNull String fileName) {
@@ -30,12 +30,19 @@ public class PackageFileLogSink implements ISink {
         this.ctx = ctx.getApplicationContext();
     }
 
+    public ISink setFormatter(@NonNull IEventFormatter formatter) {
+        synchronized(this) {
+            this.formatter = formatter;
+        }
+        return this;
+    }
+
     @NonNull
     public File getFile() {
         return ctx.getApplicationContext().getFileStreamPath(fileName);
     }
 
-    private synchronized void writeToFile(@NonNull String msg) {
+    private void writeToFile(@NonNull String msg) {
         // open the file every time for now to avoid issues with sudden process termination
         try (FileOutputStream trace = ctx.openFileOutput(fileName, Context.MODE_APPEND)){
             trace.write(msg.getBytes());
@@ -47,6 +54,8 @@ public class PackageFileLogSink implements ISink {
 
     @Override
     public void log(@NonNull Event event) {
-        writeToFile(formatter.format(event));
+        synchronized(this) {
+            writeToFile(formatter.format(event));
+        }
     }
 }

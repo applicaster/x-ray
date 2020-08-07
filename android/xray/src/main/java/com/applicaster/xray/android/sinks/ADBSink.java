@@ -7,15 +7,15 @@ import androidx.annotation.NonNull;
 import com.applicaster.xray.core.Event;
 import com.applicaster.xray.core.ISink;
 import com.applicaster.xray.core.LogLevel;
+import com.applicaster.xray.core.formatting.event.ADBTextEventFormatter;
 import com.applicaster.xray.core.formatting.event.IEventFormatter;
-import com.applicaster.xray.core.formatting.event.PlainTextEventFormatter;
 
 /*
  Very basic adb output sink
  */
 public class ADBSink implements ISink {
 
-    private final IEventFormatter formatter = new PlainTextEventFormatter();
+    private final IEventFormatter formatter = new ADBTextEventFormatter();
 
     @Override
     public void log(@NonNull Event event) {
