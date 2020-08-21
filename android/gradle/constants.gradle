@@ -1,0 +1,9 @@
+project.ext {
+    releaseVersion = '0.0.3-alpha'
+    releaseVersionCode = 1
+    minSdkVersion = 19
+    appTargetSdkVersion = 29
+    targetSdkVersion = 29
+    compileSdkVersion = 29
+    buildToolsVersion = "29.0.3"
+}
