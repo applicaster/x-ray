@@ -34,10 +34,10 @@ android {
 
 dependencies {
 
-    implementation project(':xray')
+    implementation project(':xray-core')
     implementation project(':reflectionformatter')
-    implementation project(':crashreporter')
-    implementation project(':notification')
+    implementation project(':xray-crashreporter')
+    implementation project(':xray-notification')
 
     implementation 'com.google.code.gson:gson:2.8.6'
 
