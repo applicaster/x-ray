@@ -10,7 +10,7 @@ def xrayAPI(dependencies, projectName) {
 }
 
 project.ext {
-    releaseVersion = '0.0.3-alpha'
+    releaseVersion = '0.0.4-alpha'
     releaseVersionCode = 1
     minSdkVersion = 19
     appTargetSdkVersion = 29
