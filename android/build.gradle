@@ -21,10 +21,10 @@ allprojects {
         jcenter()
         maven {
             credentials{
-                username System.getenv("MAVEN_USERNAME")
-                password System.getenv("MAVEN_PASSWORD")
+                username System.getenv("BINTRAY_USER")
+                password System.getenv("BINTRAY_API_KEY")
             }
-            url 'https://dl.bintray.com/applicaster-ltd/maven'
+            url 'https://dl.bintray.com/applicaster-ltd/maven_plugins'
         }
     }
 }
