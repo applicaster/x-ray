@@ -26,13 +26,6 @@ android {
     }
 }
 
-def xrayAPI(dependencies, projectName) {
-    if (!rootProject.findProject(projectName)) {
-        dependencies.api "com.applicaster$projectName:$project.ext.releaseVersion"
-    } else {
-        dependencies.api(project(projectName))
-    }
-}
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -45,6 +38,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+}
+
+project.ext {
+    ARTIFACT_ID="xray-notification"
+    ARTIFACT_FILE_NAME="xray-notification"
+    POM_DESCRIPTION="Applicaster XRay Notification Extension"
 }
 
 apply from: file('./../gradle/publish.gradle')

@@ -105,7 +105,7 @@ bintray {
     dryRun = false
     publish = true
     pkg {
-        repo = 'maven'
+        repo = 'maven_plugins'
         name = ARTIFACT_ID
         userOrg = 'applicaster-ltd'
         websiteUrl = POM_URL

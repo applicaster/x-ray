@@ -1,3 +1,12 @@
+
+def xrayAPI(dependencies, projectName) {
+    if (!rootProject.findProject(projectName)) {
+        dependencies.api "com.applicaster$projectName:$project.ext.releaseVersion"
+    } else {
+        dependencies.api(project(projectName))
+    }
+}
+
 project.ext {
     releaseVersion = '0.0.3-alpha'
     releaseVersionCode = 1
@@ -6,4 +15,18 @@ project.ext {
     targetSdkVersion = 29
     compileSdkVersion = 29
     buildToolsVersion = "29.0.3"
+    xrayAPI = this.&xrayAPI // https://stackoverflow.com/a/23290820
+
+    GROUP="com.applicaster"
+    POM_URL="https://github.com/applicaster/x-ray"
+    POM_SCM_URL="https://github.com/applicaster/x-ray.git"
+    POM_SCM_CONNECTION="scm:https://github.com/applicaster/x-ray.git"
+    POM_SCM_DEV_CONNECTION="scm:https://github.com/applicaster/x-ray.git"
+    POM_LICENCE_NAME="The Apache Software License, Version 2.0"
+    POM_LICENCE_URL="http://www.apache.org/licenses/LICENSE-2.0.txt"
+    POM_LICENCE_DIST="repo"
+    POM_DEVELOPER_ID="alex"
+    POM_DEVELOPER_NAME="Aleksandr Smirnov"
+    POM_DEVELOPER_EMAIL="a.smirnov@applicaster.com"
+    ISSUE_URL="https://github.com/applicaster/x-ray/issues"
 }
