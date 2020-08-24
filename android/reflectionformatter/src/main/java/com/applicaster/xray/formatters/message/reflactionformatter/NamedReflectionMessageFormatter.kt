@@ -1,5 +1,7 @@
 package com.applicaster.xray.formatters.message.reflactionformatter
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import java.util.regex.Pattern
 
 /*
@@ -12,6 +14,7 @@ class NamedReflectionMessageFormatter : ReflectionMessageFormatter() {
         val regex = Pattern.compile(namedPlaceholder)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun format(
         template: String,
         outParameters: MutableMap<String, Any?>?,
