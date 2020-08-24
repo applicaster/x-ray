@@ -1,0 +1,96 @@
+references:
+  workspace_root: &workspace_root ~/applicaster/x-ray/android
+  cache_file: &cache_file gradle-cache-v1-{{ checksum "build.gradle" }}
+  container_config: &container_config
+    working_directory: *workspace_root
+    shell: /bin/bash --login
+    resource_class: large
+    docker:
+      - image: circleci/android:api-29-node
+    environment: &environment
+      REACT_NATIVE_VERSION: 0.62.2
+      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx6144M -XX:MaxPermSize=1024m -Xms512m -XX:+HeapDumpOnOutOfMemoryError"'
+
+version: 2
+jobs:
+
+  build: &build_steps
+    <<: *container_config
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: *cache_file
+
+      - run:
+          name: Install react-native from npm
+          command: npm install react-native@${REACT_NATIVE_VERSION}
+
+      - run:
+          name: Download Android Dependencies
+          command: ./gradlew androidDependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+            - ./node_modules
+          key: *cache_file
+
+      - run:
+          name: Lint check
+          command: ./gradlew lint
+
+      - run:
+          name: Build xray-core
+          command: ./gradlew :xray-core:assembleRelease
+
+      - run:
+          name: Build xray-notification
+          command: ./gradlew :xray-notification:assembleRelease
+
+      - run:
+          name: Build xray-crashreporter
+          command: ./gradlew :xray-crashreporter:assembleRelease
+
+      - run:
+          name: Upload Bintray
+          command: |
+            if [ $CIRCLE_TAG ] && [ PUBLISH_ARTIFACTS ]; then
+              ./gradlew :xray-core:bintrayUpload
+              ./gradlew :xray-notification:bintrayUpload
+              ./gradlew :xray-crashreporter:bintrayUpload
+            fi
+
+  publish:
+    <<: *build_steps
+    environment:
+      <<: *environment
+      PUBLISH_ARTIFACTS: true
+
+workflows:
+  version: 2
+  test-n-deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - hold_publish:
+          requires:
+            - build
+          type: approval
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - publish:
+          requires:
+            - build
+            - hold_publish
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
