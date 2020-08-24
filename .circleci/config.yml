@@ -4,7 +4,7 @@ references:
   container_config: &container_config
     working_directory: *workspace_root
     shell: /bin/bash --login
-    resource_class: large
+    resource_class: medium
     docker:
       - image: circleci/android:api-29-node
     environment: &environment
