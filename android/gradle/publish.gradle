@@ -72,10 +72,11 @@ project.afterEvaluate {
                         developer.appendNode('id', POM_DEVELOPER_ID)
                         developer.appendNode('name', POM_DEVELOPER_NAME)
                         developer.appendNode('email', POM_DEVELOPER_EMAIL)
-                        def dependenciesNode = asNode().appendNode('dependencies')
+                        def dependenciesNode = root.appendNode('dependencies')
                         def allExportedDependencies =
                                 configurations.implementation.allDependencies +
-                                        configurations.api.allDependencies
+                                configurations.api.allDependencies +
+                                configurations.runtimeOnly.allDependencies
                         allExportedDependencies.each {
                             if (!it.name.is('unspecified') && !it.version.is('unspecified')) {
                                 def dependencyNode = dependenciesNode.appendNode('dependency')

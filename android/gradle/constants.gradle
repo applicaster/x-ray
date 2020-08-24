@@ -4,6 +4,8 @@ def xrayAPI(dependencies, projectName) {
         dependencies.api "com.applicaster$projectName:$project.ext.releaseVersion"
     } else {
         dependencies.api(project(projectName))
+        // pass dependency to POM builder
+        dependencies.runtimeOnly "com.applicaster$projectName:$project.ext.releaseVersion"
     }
 }
 
