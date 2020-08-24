@@ -1,6 +1,6 @@
 def xrayAPI(dependencies, projectName) {
     if (!rootProject.findProject(projectName)) {
-        dependencies.api "com.applicaster$projectName:$project.ext.releaseVersion"
+        dependencies.api "$project.ext.GROUP$projectName:$project.ext.releaseVersion"
     } else {
         dependencies.api(project(projectName))
         // pass dependency to POM builder
@@ -8,7 +8,7 @@ def xrayAPI(dependencies, projectName) {
         dependencyNode.appendNode('groupId', project.ext.GROUP)
         dependencyNode.appendNode('artifactId', projectName)
         dependencyNode.appendNode('version', project.ext.releaseVersion)
-        ext.xrayDependencies += dependencyNode
+        project.ext.xrayDependencies += dependencyNode
     }
 }
 

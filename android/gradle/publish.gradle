@@ -85,10 +85,7 @@ project.afterEvaluate {
                         }
                         // append xray self-dependencies
                         project.ext.xrayDependencies.each {
-                            def dependencyNode = dependenciesNode.appendNode('dependency')
-                            dependencyNode.appendNode('groupId', it.get('groupId'))
-                            dependencyNode.appendNode('artifactId', it.get('artifactId'))
-                            dependencyNode.appendNode('version', it.get('version'))
+                            dependenciesNode.append(it)
                         }
                     }
                 }
