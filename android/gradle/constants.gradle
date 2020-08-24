@@ -1,11 +1,14 @@
-
 def xrayAPI(dependencies, projectName) {
     if (!rootProject.findProject(projectName)) {
         dependencies.api "com.applicaster$projectName:$project.ext.releaseVersion"
     } else {
         dependencies.api(project(projectName))
         // pass dependency to POM builder
-        dependencies.runtimeOnly "com.applicaster$projectName:$project.ext.releaseVersion"
+        def dependencyNode = new Node(null, 'dependency')
+        dependencyNode.appendNode('groupId', project.ext.GROUP)
+        dependencyNode.appendNode('artifactId', projectName)
+        dependencyNode.appendNode('version', project.ext.releaseVersion)
+        ext.xrayDependencies += dependencyNode
     }
 }
 
@@ -18,6 +21,8 @@ project.ext {
     compileSdkVersion = 29
     buildToolsVersion = "29.0.3"
     xrayAPI = this.&xrayAPI // https://stackoverflow.com/a/23290820
+
+    xrayDependencies =[]
 
     GROUP="com.applicaster"
     POM_URL="https://github.com/applicaster/x-ray"
