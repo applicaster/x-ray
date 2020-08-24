@@ -27,11 +27,6 @@ jobs:
           name: Install react-native from npm
           command: npm install react-native@${REACT_NATIVE_VERSION}
 
-      - run:
-          name: Download Android Dependencies
-          working_directory: android
-          command: ./gradlew androidDependencies
-
       - save_cache:
           paths:
             - ~/.gradle
