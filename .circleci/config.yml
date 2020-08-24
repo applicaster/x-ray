@@ -62,7 +62,7 @@ jobs:
           name: Upload Bintray
           working_directory: android
           command: |
-            if [ $CIRCLE_TAG ] && [ PUBLISH_ARTIFACTS ]; then
+            if [ $CIRCLE_TAG ] && [ -z PUBLISH_ARTIFACTS ]; then
               ./gradlew :xray-core:bintrayUpload
               ./gradlew :xray-notification:bintrayUpload
               ./gradlew :xray-crashreporter:bintrayUpload
