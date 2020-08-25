@@ -6,7 +6,7 @@ Library provides general purpose logging and reporting facilities for Android, i
 
 ## Motivation
 
-While there are a log of different logging systems for Android and iOS available, they all are mostly developer-oriented, and perform only single task: logging.
+While there are a lot of different logging systems for Android and iOS available, they all are mostly developer-oriented, and perform only single task: logging.
 Some of them are too simplistic (timber), while other are too complex (logs4j), and none provide user/QA facing features: easy external configuration, UI.
 
 X-Ray library is designed with the following goals:
