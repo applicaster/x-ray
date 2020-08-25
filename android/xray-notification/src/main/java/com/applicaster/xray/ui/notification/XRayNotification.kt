@@ -90,6 +90,21 @@ object XRayNotification {
         currentNotificationId = notificationId
     }
 
+    // Does not guarantee that notification is visible, only that the feature is enabled.
+    // User could had it dismissed, but it will pop up back on next warning or error
+    fun isShowing() = currentNotificationId != -1
+
+    fun hide(context: Context) {
+        if (-1 == currentNotificationId) {
+            return
+        }
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(currentNotificationId)
+        Core.get().removeSink(ERROR_COUNTER_SINK_NAME)
+        currentNotificationId = -1
+    }
+
     private fun addErrorCounter(
         notificationBuilder: NotificationCompat.Builder,
         notificationManager: NotificationManager,
@@ -116,14 +131,4 @@ object XRayNotification {
         }
     }
 
-    fun hide(context: Context) {
-        if (-1 == currentNotificationId) {
-            return
-        }
-        val notificationManager =
-            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(currentNotificationId)
-        Core.get().removeSink(ERROR_COUNTER_SINK_NAME)
-        currentNotificationId = -1
-    }
 }
