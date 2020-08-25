@@ -2,7 +2,20 @@
 
 ## Overview
 
-Library provides general purpose logging facilities for Android, iOS, and React Native.
+Library provides general purpose logging and reporting facilities for Android, iOS, and React Native.
+
+## Motivation
+
+While there are a log of different logging systems for Android and iOS available, they all are mostly developer-oriented, and perform only single task: logging.
+Some of them are too simplistic (timber), while other are too complex (logs4j), and none provide user/QA facing features: easy external configuration, UI.
+
+X-Ray library is designed with the following goals:
+* Provide a drop-in solution for Android, iOS, and React Native logging.
+* Provide ready to use UI components for logging configuration, display, and reporting.
+* Provide additional features related to application diagnostics and insights: crash reporting, log sharing.
+* Modularity, so many of the components can be used as a standalone, or combined with other logging solutions.
+* Ease of extensibility and customization.
+* Inherit best practices from other logging systems, including [Python](https://docs.python.org/3/library/logging.html), C# [Serilog](https://serilog.net/), etc.
 
 ## Features:
 - Custom sinks, as in Serilog: ADB, file, etc.
@@ -121,6 +134,7 @@ This approach allows to avoid dependency resolution failures due to the fact tha
 - In-memory circular buffer event sink
 - Maybe output file sinks to cache and not data storage, so user can wipe it without losing data
 - Trim/rotate file sinks
+- HTTP server sink
 
 ## Issues:
 - Using Android-specific nullable annotations
