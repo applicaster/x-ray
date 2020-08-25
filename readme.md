@@ -11,13 +11,15 @@ Some of them are too simplistic (timber), while other are too complex (logs4j), 
 
 X-Ray library is designed with the following goals:
 * Provide a drop-in solution for Android, iOS, and React Native logging.
+* Modularity, so many of the components can be used as a standalone, or combined with other logging solutions.
+* Provide easy to use syntax and infrastructure for developers to report the information.
 * Provide ready to use UI components for logging configuration, display, and reporting.
 * Provide additional features related to application diagnostics and insights: crash reporting, log sharing.
-* Modularity, so many of the components can be used as a standalone, or combined with other logging solutions.
 * Ease of extensibility and customization.
 * Inherit best practices from other logging systems, including [Python](https://docs.python.org/3/library/logging.html), C# [Serilog](https://serilog.net/), etc.
 
 ## Features:
+
 - Custom sinks, as in Serilog: ADB, file, etc.
 - Flexible filtering
 - Extensions: crash reporting, notification controls
