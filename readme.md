@@ -4,9 +4,9 @@
 
 Library provides general purpose logging facilities for Android, iOS, and React Native.
 
-
 ## Features:
 - Custom sinks, as in Serilog: ADB, file, etc.
+- Flexible filtering
 - Extensions: crash reporting, notification controls
 - Deep object dump support with moshi
 
@@ -19,7 +19,8 @@ In minimal configuration, only core is required. It contains all required loggin
 Project can be connected in a number of ways:
 1. Using maven artifacts:
 
-Maven artifacts is enough for building native Android applications.
+Maven artifacts is a recommended way for native Android applications.
+
 Add the following repository to your project top level gradle
 
 `maven { url 'https://dl.bintray.com/applicaster-ltd/maven_plugins' }`
@@ -71,6 +72,30 @@ Log from some particular component of some subsystem:
             .message("Basic message")
 ```
 
+## Advanced Filtering Configuration
+
+Output from any logger to any sink can be filtered. Default filter implementation allows to filter by log level.
+
+Here, we only allow error messages to pass to the second file sink `error_log_sink`:
+
+```
+        Core.get()
+            .addSink("default_log_sink", fileLogSink)
+            .addSink("error_log_sink", errorFileLogSink)
+            .setFilter("error_log_sink", "", DefaultSinkFilter(LogLevel.error))
+```
+This can be used when verbose logging level log file is been recreated for every application launch, or enabled on demand to avoid it taking too much space, while error log file is been preserved or rotated.
+
+Filtering can be overridden for specific subsystems and its descendants.
+Here, we allow all messages from `childLogger` and its descendants to pass to the second file sink:
+```
+        Core.get()
+            .setFilter("error_log_sink", "childLogger", DefaultSinkFilter(LogLevel.debug))
+```
+
+Please refer to the [./docs/adr/003-sink-filters.md](./docs/adr/003-sink-filters.md) for more details on the filtering approach.
+
+
 # Android Building and Deployment
 
 Project can be published to both npm and maven.
@@ -84,7 +109,7 @@ Note that xray component dependencies for extensions are imported using special 
 
 This helper dynamically resolves dependency to either project or maven artifact, and also stores dependency information in the project.
 Stored dependency information later used by maven publishing script to build POM file.
-This approach allows to avoid dependency resolution failures due to the fact that, during publishing, extensions are dependent on the artifacts that only about to be published.
+This approach allows to avoid dependency resolution failures due to the fact that, during publishing, extensions are dependent on the artifacts that are only about to be published.
 
 
 # To Do:
