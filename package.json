@@ -12,6 +12,7 @@
   },
   "scripts": {},
   "files": [
-    "android"
+    "android",
+    "apple"
   ]
 }
