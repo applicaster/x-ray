@@ -54,4 +54,7 @@ project.ext {
     POM_DESCRIPTION="Applicaster XRay React Native Extension"
 }
 
-apply from: file('./../gradle/publish.gradle')
+if(gradle.ext.hasProperty('xRayPublishing')) {
+    apply from: file('./../gradle/publish.gradle')
+}
+

@@ -46,4 +46,7 @@ project.ext {
     POM_DESCRIPTION="Applicaster XRay Crash Reporter Extension"
 }
 
-apply from: file('./../gradle/publish.gradle')
+if(gradle.ext.hasProperty('xRayPublishing')) {
+    apply from: file('./../gradle/publish.gradle')
+}
+

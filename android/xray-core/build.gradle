@@ -48,4 +48,7 @@ project.ext {
     POM_DESCRIPTION="Applicaster XRay Core"
 }
 
-apply from: file('./../gradle/publish.gradle')
+if(gradle.ext.hasProperty('xRayPublishing')) {
+    apply from: file('./../gradle/publish.gradle')
+}
+
