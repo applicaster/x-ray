@@ -88,7 +88,6 @@ jobs:
           command: |
             if [ $CIRCLE_TAG ] && [ $PUBLISH_ARTIFACTS ]; then
               [[ $CIRCLE_TAG =~ ^([0-9]+\.)*([0-9]+)+$ ]] ; is_release_tag=$?
-              echo $is_release_tag
               branch_name=$(git symbolic-ref -q HEAD)
               branch_name=${branch_name##refs/heads/}
               branch_name=${branch_name:-HEAD}
@@ -96,7 +95,7 @@ jobs:
               then
                 if [[ 1 = is_release_tag ]]
                 then
-                    echo "publish @applicaster/x-ray --no-git-tag-version"
+                    npm publish @applicaster/x-ray --no-git-tag-version
                 else
                     echo "Stable release tag expected, got alpha/beta/rc tag"
                 fi
@@ -105,7 +104,7 @@ jobs:
               then
                     echo "alpha/beta/rc tag expected, got stable release tag"
                 else
-                    echo "publish @applicaster/x-ray --no-git-tag-version --next"
+                    npm publish @applicaster/x-ray --no-git-tag-version --next
                 fi
               fi
             fi
