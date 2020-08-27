@@ -15,7 +15,7 @@ references:
 version: 2
 jobs:
 
-  build: &build_steps
+  build_android: &build_steps
     <<: *container_config
     steps:
       - checkout
@@ -68,33 +68,88 @@ jobs:
               ./gradlew :xray-crashreporter:bintrayUpload
             fi
 
-  publish:
+  publish_bintray:
     <<: *build_steps
     environment:
       <<: *environment
       PUBLISH_ARTIFACTS: true
 
+  publish_npm:
+    <<: *container_config
+    environment:
+      <<: *environment
+      PUBLISH_ARTIFACTS: true
+
+    steps:
+      - checkout
+
+      - run:
+          name: Upload npm
+          command: |
+            if [ $CIRCLE_TAG ] && [ $PUBLISH_ARTIFACTS ]; then
+              [[ $CIRCLE_TAG =~ ^([0-9]+\.)*([0-9]+)+$ ]] ; is_release_tag=$?
+              echo $is_release_tag
+              branch_name=$(git symbolic-ref -q HEAD)
+              branch_name=${branch_name##refs/heads/}
+              branch_name=${branch_name:-HEAD}
+              if [ 'master' = $branch_name ]
+              then
+                if [[ 1 = is_release_tag ]]
+                then
+                    echo "publish @applicaster/x-ray --no-git-tag-version"
+                else
+                    echo "Stable release tag expected, got alpha/beta/rc tag"
+                fi
+              else
+              if [[ 1 = is_release_tag ]]
+              then
+                    echo "alpha/beta/rc tag expected, got stable release tag"
+                else
+                    echo "publish @applicaster/x-ray --no-git-tag-version --next"
+                fi
+              fi
+            fi
+
+
 workflows:
   version: 2
   test-n-deploy:
     jobs:
-      - build:
+      - build_android:
           filters:
             tags:
               only: /.*/
-      - hold_publish:
+      - hold_publish_bintray:
           requires:
-            - build
+            - build_android
           type: approval
           filters:
             tags:
               only: /.*/
             branches:
               ignore: /.*/
-      - publish:
+      - publish_bintray:
           requires:
-            - build
-            - hold_publish
+            - build_android
+            - hold_publish_bintray
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - hold_publish_npm:
+          requires:
+            - build_android
+          type: approval
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - publish_npm:
+          requires:
+            - build_android
+            - hold_publish_npm
           filters:
             tags:
               only: /.*/
