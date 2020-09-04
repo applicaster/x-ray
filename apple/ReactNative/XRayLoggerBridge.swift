@@ -10,10 +10,12 @@ import Foundation
 import React
 
 @objc(XRayLoggerBridge)
-class XRayLoggerBridge: NSObject, RCTBridgeModule {
-    var bridge: RCTBridge!
+public class XRayLoggerBridge: NSObject, RCTBridgeModule {
+    public static var customLogLevel: LogLevel?
 
-    static func moduleName() -> String! {
+    public var bridge: RCTBridge!
+
+    public static func moduleName() -> String! {
         return "XRayLoggerBridge"
     }
 
@@ -37,15 +39,26 @@ class XRayLoggerBridge: NSObject, RCTBridgeModule {
                                                logLevel: logLevel) else {
             return
         }
-        let newSubsystem = "\(Bundle.main.bundleIdentifier!)/quick_brick/\(subsystem)"
-        let event = Event(category: category,
-                          subsystem: newSubsystem,
-                          timestamp: UInt(round(NSDate().timeIntervalSince1970)),
-                          level: logLevel,
-                          message: message,
-                          data: eventData["data"] as? [String: Any],
-                          context: eventData["context"] as? [String: Any],
-                          exception: nil)
-        XrayLogger.sharedInstance.submit(event: event)
+
+        if shouldSendRNLogs(logLevel: logLevel) {
+            let newSubsystem = "\(Bundle.main.bundleIdentifier!)/quick_brick/\(subsystem)"
+            let event = Event(category: category,
+                              subsystem: newSubsystem,
+                              timestamp: UInt(round(NSDate().timeIntervalSince1970)),
+                              level: logLevel,
+                              message: message,
+                              data: eventData["data"] as? [String: Any],
+                              context: eventData["context"] as? [String: Any],
+                              exception: nil)
+            XrayLogger.sharedInstance.submit(event: event)
+        }
+    }
+
+    func shouldSendRNLogs(logLevel: LogLevel) -> Bool {
+        if let customLogLevel = XRayLoggerBridge.customLogLevel,
+            logLevel.rawValue < customLogLevel.rawValue {
+            return false
+        }
+        return true
     }
 }
