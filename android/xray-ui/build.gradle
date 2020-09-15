@@ -26,7 +26,6 @@ android {
     }
 }
 
-
 dependencies {
     xrayAPI(dependencies, ':xray-core')
     xrayAPI(dependencies, ':xray-crashreporter')
@@ -44,4 +43,14 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+}
+
+project.ext {
+    ARTIFACT_ID="xray-ui"
+    ARTIFACT_FILE_NAME="xray-ui"
+    POM_DESCRIPTION="Applicaster XRay UI Extensions"
+}
+
+if(gradle.ext.hasProperty('xRayPublishing')) {
+    apply from: file('./../gradle/publish.gradle')
 }

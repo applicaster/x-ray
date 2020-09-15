@@ -66,6 +66,7 @@ jobs:
               ./gradlew :xray-core:bintrayUpload
               ./gradlew :xray-notification:bintrayUpload
               ./gradlew :xray-crashreporter:bintrayUpload
+              ./gradlew :xray-ui:bintrayUpload
             fi
 
   publish_bintray:
