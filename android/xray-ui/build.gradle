@@ -1,16 +1,18 @@
+apply from: file('./../gradle/constants.gradle')
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion project.ext.compileSdkVersion
+    buildToolsVersion project.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 19
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
+        versionCode project.ext.releaseVersionCode
+        versionName project.ext.releaseVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -24,9 +26,10 @@ android {
     }
 }
 
+
 dependencies {
-    implementation('com.applicaster:xray-core:0.0.4-alpha')
-    implementation('com.applicaster:xray-crashreporter:0.0.4-alpha')
+    xrayAPI(dependencies, ':xray-core')
+    xrayAPI(dependencies, ':xray-crashreporter')
 
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 

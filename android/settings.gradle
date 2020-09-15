@@ -2,6 +2,7 @@ include ':xray-notification'
 include ':reflectionformatter'
 include ':xray-react-native'
 include ':xray-crashreporter'
+include ':xray-ui'
 include ':xray-core'
 include ':app'
 rootProject.name = "Logging"

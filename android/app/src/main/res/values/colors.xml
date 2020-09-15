@@ -3,9 +3,4 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="colorLogError">#F00</color>
-    <color name="colorLogWarning">#FF0</color>
-    <color name="colorLogInfo">#00F</color>
-    <color name="colorLogDebug">#777</color>
-    <color name="colorLogVerbose">#000</color>
 </resources>

@@ -38,6 +38,7 @@ dependencies {
     implementation project(':reflectionformatter')
     implementation project(':xray-crashreporter')
     implementation project(':xray-notification')
+    implementation project(':xray-ui')
 
     implementation 'com.google.code.gson:gson:2.8.6'
 

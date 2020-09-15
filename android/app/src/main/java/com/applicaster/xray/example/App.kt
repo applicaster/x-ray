@@ -24,7 +24,7 @@ class App : Application() {
     }
 
     companion object {
-        const val memory_sink_name = "memory_sink"
+        const val memory_sink_name = "memory_sink" // used in EventLogFragment sink_name field
     }
 
     private fun initXRay() {
