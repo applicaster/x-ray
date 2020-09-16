@@ -35,6 +35,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-// tell subprojects to include publish scripts
-gradle.ext.xRayPublishing = true
