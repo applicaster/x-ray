@@ -2,13 +2,14 @@ package com.applicaster.xray.reactnative
 
 import com.applicaster.xray.core.Core
 import com.applicaster.xray.core.Event
-import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.ReadableMap
+import com.applicaster.xray.core.Logger
+import com.facebook.react.bridge.*
+import java.util.*
 
 class XRayLoggerBridge(reactContext: ReactApplicationContext)
     : ReactContextBaseJavaModule(reactContext) {
+
+    private val logger = Logger.get(NAME)
 
     companion object {
         private const val NAME = "XRayLoggerBridge"
@@ -27,18 +28,32 @@ class XRayLoggerBridge(reactContext: ReactApplicationContext)
             return
         }
         val event = Event(
-            category,
-            subsystem,
-            System.currentTimeMillis(),
-            level,
-            eventData.getString("message")!!,
-            optHashMap(eventData,"data"),
-            optHashMap(eventData,"context"),
-            null
+                category,
+                subsystem,
+                System.currentTimeMillis(),
+                level,
+                eventData.getString("message")!!,
+                optHashMap(eventData, "data"),
+                optHashMap(eventData, "context"),
+                null
         )
         Core.get().submit(event)
     }
 
-    private fun optHashMap(eventData: ReadableMap, key: String) =
-        if (eventData.hasKey(key)) eventData.getMap(key)?.toHashMap() else null
+    private fun optHashMap(eventData: ReadableMap, key: String): HashMap<String, Any>? {
+        if (!eventData.hasKey(key)) {
+            return null
+        }
+        val type = eventData.getType(key)
+        return when {
+            ReadableType.Null == type -> null
+            ReadableType.Map != type -> {
+                logger.e(NAME).message(
+                        "Wrong data type was passed to X-Ray bridge in $key field: expected Map, got $type." +
+                                " $key will be omitted from the log record.")
+                null
+            }
+            else -> eventData.getMap(key)?.toHashMap()
+        }
+    }
 }
