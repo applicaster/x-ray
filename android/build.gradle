@@ -32,6 +32,11 @@ allprojects {
     }
 }
 
+ext {
+    // tell subprojects to include publish scripts
+    xRayPublishing = true
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

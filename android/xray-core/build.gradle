@@ -39,7 +39,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
 }
 
 project.ext {
@@ -48,7 +47,6 @@ project.ext {
     POM_DESCRIPTION="Applicaster XRay Core"
 }
 
-if(gradle.ext.hasProperty('xRayPublishing')) {
+if(rootProject.ext.has("xRayPublishing")) {
     apply from: file('./../gradle/publish.gradle')
 }
-

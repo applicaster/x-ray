@@ -46,6 +46,6 @@ project.ext {
     POM_DESCRIPTION="Applicaster XRay Notification Extension"
 }
 
-if(rootProject.hasProperty('xRayPublishing')) {
+if(rootProject.ext.has('xRayPublishing')) {
     apply from: file('./../gradle/publish.gradle')
 }
