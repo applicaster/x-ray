@@ -12,7 +12,7 @@ import com.applicaster.xray.core.LogLevel
 import com.applicaster.xray.core.Logger
 import com.applicaster.xray.crashreporter.Reporting
 import com.applicaster.xray.crashreporter.SendActivity
-import com.applicaster.xray.example.sinks.InMemoryLogSink
+import com.applicaster.xray.ui.sinks.InMemoryLogSink
 import com.applicaster.xray.example.ui.MainActivity
 import com.applicaster.xray.formatters.message.reflactionformatter.ReflectionMessageFormatter
 import com.applicaster.xray.ui.notification.XRayNotification

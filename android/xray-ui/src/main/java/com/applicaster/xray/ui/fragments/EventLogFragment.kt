@@ -16,7 +16,7 @@ import com.applicaster.xray.ui.utility.FilteredEventList
 import com.applicaster.xray.ui.adapters.EventRecyclerViewAdapter
 import com.applicaster.xray.core.Core
 import com.applicaster.xray.core.LogLevel
-import com.applicaster.xray.example.sinks.InMemoryLogSink
+import com.applicaster.xray.ui.sinks.InMemoryLogSink
 
 /**
  * A fragment representing a list of Items.

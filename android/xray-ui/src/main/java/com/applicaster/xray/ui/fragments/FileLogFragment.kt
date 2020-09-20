@@ -18,7 +18,7 @@ import java.io.File
 
 class FileLogFragment : Fragment() {
 
-    private var fileSinkFileName: String? = null
+    private var fileName: String? = null
     private var file: File? = null
     private var observer: FileObserver? = null
 
@@ -51,7 +51,7 @@ class FileLogFragment : Fragment() {
         super.onInflate(context, attrs, savedInstanceState)
         val ta = context.obtainStyledAttributes(attrs, R.styleable.FileLogFragment_MembersInjector)
         if (ta.hasValue(R.styleable.FileLogFragment_MembersInjector_file_name)) {
-            fileSinkFileName = ta.getString(R.styleable.FileLogFragment_MembersInjector_file_name)
+            fileName = ta.getString(R.styleable.FileLogFragment_MembersInjector_file_name)
         }
         ta.recycle()
     }
@@ -61,7 +61,7 @@ class FileLogFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.xray_fragment_log, container, false)
-        file = activity!!.getFileStreamPath(fileSinkFileName)
+        file = activity!!.getFileStreamPath(fileName)
         logView = view.findViewById(R.id.lbl_log)
         btnSend = view.findViewById(R.id.btn_send)
         btnSend?.setOnClickListener { send() }
