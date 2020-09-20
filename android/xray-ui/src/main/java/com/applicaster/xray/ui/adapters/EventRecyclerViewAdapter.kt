@@ -13,13 +13,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.applicaster.plugin.xray.R
-import com.applicaster.xray.ui.utility.format
 import com.applicaster.xray.core.Event
+import com.applicaster.xray.ui.utility.format
 import kotlinx.android.synthetic.main.xray_fragment_event_log_entry.view.*
 
 class EventRecyclerViewAdapter(
-        owner: LifecycleOwner,
-        observableEventList: LiveData<List<Event>>
+    owner: LifecycleOwner,
+    observableEventList: LiveData<List<Event>>
 ) : RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder>(), Observer<List<Event>> {
 
     private var values: List<Event> = observableEventList.value!!
@@ -30,7 +30,7 @@ class EventRecyclerViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = LayoutInflater.from(parent.context)
-                .inflate(R.layout.xray_fragment_event_log_entry, parent, false)
+            .inflate(R.layout.xray_fragment_event_log_entry, parent, false)
         return ViewHolder(binding)
     }
 
@@ -41,21 +41,20 @@ class EventRecyclerViewAdapter(
 
     override fun getItemCount(): Int = values.size
 
-    inner class ViewHolder(private val view: View)
-        : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
         init {
             view.setOnLongClickListener {
                 getSystemService(
-                        view.context,
-                        ClipboardManager::class.java
+                    view.context,
+                    ClipboardManager::class.java
                 )?.let {
                     val clip = ClipData.newPlainText("log event", event!!.format())
                     it.setPrimaryClip(clip)
                     Toast.makeText(
-                            view.context,
-                            "Message was copied to clipboard",
-                            Toast.LENGTH_SHORT
+                        view.context,
+                        "Message was copied to clipboard",
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
                 true
@@ -67,9 +66,7 @@ class EventRecyclerViewAdapter(
         // should be static, but its internal class
         private val colors = view.resources.getIntArray(R.array.log_levels)
 
-        override fun toString(): String {
-            return super.toString() + " '" + view.message.text + "'"
-        }
+        override fun toString(): String = super.toString() + " '" + view.message.text + "'"
 
         fun bind(item: Event) {
             event = item

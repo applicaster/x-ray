@@ -36,13 +36,13 @@ class FileLogFragment : Fragment() {
                 return@Runnable
             }
             if(null == file) {
-                logView?.postDelayed(fileCreateListener, 500)
+                logView?.postDelayed(fileCreateListener, CREATE_SCAN_INTERVAL)
                 return@Runnable
             }
             if(file!!.exists()) {
                 reloadLog()
             } else {
-                logView?.postDelayed(fileCreateListener, 500)
+                logView?.postDelayed(fileCreateListener, CREATE_SCAN_INTERVAL)
             }
         }
     }
@@ -61,13 +61,15 @@ class FileLogFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.xray_fragment_log, container, false)
-        file = activity!!.getFileStreamPath(fileName)
+        file = if (TextUtils.isEmpty(fileName)) null else activity!!.getFileStreamPath(fileName)
         logView = view.findViewById(R.id.lbl_log)
         btnSend = view.findViewById(R.id.btn_send)
         btnSend?.setOnClickListener { send() }
         btnClear = view.findViewById(R.id.btn_clear)
         btnClear?.setOnClickListener { clear() }
-        view.setTag(R.id.fragment_title_tag, file!!.name)
+        if(null != file) {
+            view.setTag(R.id.fragment_title_tag, file!!.name)
+        }
         return view
     }
 
@@ -79,9 +81,11 @@ class FileLogFragment : Fragment() {
             return
         }
         var hasLog = false
-        if (!file!!.exists()) {
+        if (null == file) {
+            logView?.text = MSG_FILE_NOT_SPECIFIED
+        } else if (!file!!.exists()) {
             logView?.text = MSG_NOT_FOUND
-            logView?.postDelayed(fileCreateListener, 500)
+            logView?.postDelayed(fileCreateListener, CREATE_SCAN_INTERVAL)
         } else {
             val log = file!!.readText(Charsets.UTF_8)
             hasLog = !TextUtils.isEmpty(log)
@@ -123,14 +127,14 @@ class FileLogFragment : Fragment() {
     }
 
     private fun send() {
-        if (file!!.exists()) {
+        if (true == file?.exists()) {
             Reporting.sendLogReport(activity!!, file)
         }
     }
 
     private fun clear() {
         // it should trigger file observer, but for clarity we set it here, too
-        if (file!!.delete()) {
+        if (true == file?.delete()) {
             logView!!.text = MSG_NOT_FOUND
             btnSend?.isEnabled = false
             btnClear?.isEnabled = false
@@ -141,7 +145,9 @@ class FileLogFragment : Fragment() {
         @JvmStatic
         fun newInstance() = FileLogFragment()
         private const val UPDATE_DELAY = 100L
+        private const val CREATE_SCAN_INTERVAL = 500L
         private const val MSG_EMPTY = "[Empty]"
         private const val MSG_NOT_FOUND = "[Not found]"
+        private const val MSG_FILE_NOT_SPECIFIED = "[File not specified]"
     }
 }

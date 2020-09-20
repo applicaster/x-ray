@@ -3,6 +3,7 @@ package com.applicaster.xray.ui.adapters;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.PagerTitleStrip;
@@ -25,6 +26,7 @@ public class ViewsPagerAdapter extends PagerAdapter {
         mPager.setOffscreenPageLimit(mPager.getChildCount() - mOffset);
     }
 
+    @NonNull
     public Object instantiateItem(ViewGroup collection, int position) {
         return collection.getChildAt(position + mOffset);
     }
@@ -42,15 +44,19 @@ public class ViewsPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public boolean isViewFromObject(View arg0, Object arg1) {
-        return arg0 == arg1;
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
+        return view == object;
     }
 
     @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
+    public void destroyItem(@NonNull ViewGroup container,
+                            int position,
+                            @NonNull Object object) {
     }
 
     @Override
-    public void destroyItem(View container, int position, Object object) {
+    public void destroyItem(@NonNull View container,
+                            int position,
+                            @NonNull Object object) {
     }
 }

@@ -50,29 +50,40 @@ class EventLogFragment : Fragment() {
 
         // todo: show message if sink is missing
         if (null != inMemoryLogSink) {
-            val list = view.findViewById<RecyclerView>(R.id.list)
 
             // Wrap original list to filtered one
             val filteredList = FilteredEventList(viewLifecycleOwner, inMemoryLogSink.getLiveData())
 
             // Setup log level filter spinner
-            val levels = view.findViewById<Spinner>(R.id.cb_filter)
-            levels.adapter = ArrayAdapter(levels.context, android.R.layout.simple_list_item_1, LogLevel.values())
-            levels.setSelection(LogLevel.info.level)
-            levels.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
+            view.findViewById<Spinner>(R.id.cb_filter).apply {
+                adapter = ArrayAdapter(
+                    context,
+                    android.R.layout.simple_list_item_1,
+                    LogLevel.values()
+                )
+                setSelection(LogLevel.info.level)
+                onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                    override fun onNothingSelected(parent: AdapterView<*>?) {
+                    }
 
-                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    filteredList.filter = LogLevel.values()[position]
+                    override fun onItemSelected(
+                        parent: AdapterView<*>?,
+                        view: View?,
+                        position: Int,
+                        id: Long
+                    ) {
+                        filteredList.filter = LogLevel.values()[position]
+                    }
                 }
             }
 
             // Setup the list adapter
-            list.adapter = EventRecyclerViewAdapter(
-                viewLifecycleOwner,
-                filteredList
-            )
+            view.findViewById<RecyclerView>(R.id.list).apply {
+                adapter = EventRecyclerViewAdapter(
+                    viewLifecycleOwner,
+                    filteredList
+                )
+            }
 
         }
         view.setTag(R.id.fragment_title_tag, getString(R.string.tab_title_events))
