@@ -12,11 +12,11 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.applicaster.plugin.xray.R
-import com.applicaster.xray.ui.utility.FilteredEventList
-import com.applicaster.xray.ui.adapters.EventRecyclerViewAdapter
 import com.applicaster.xray.core.Core
 import com.applicaster.xray.core.LogLevel
+import com.applicaster.xray.ui.adapters.EventRecyclerViewAdapter
 import com.applicaster.xray.ui.sinks.InMemoryLogSink
+import com.applicaster.xray.ui.utility.FilteredEventList
 
 /**
  * A fragment representing a list of Items.
@@ -35,16 +35,18 @@ class EventLogFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
         val view = inflater.inflate(R.layout.xray_fragment_event_log_list, container, false)
 
         // We expect our example Plugin to provide this sink as InMemoryLogSink
         val inMemoryLogSink =
-                if (null == inMemorySinkName) null
-                else Core.get().getSink(inMemorySinkName!!) as InMemoryLogSink?
+            when (inMemorySinkName) {
+                null -> null
+                else -> Core.get().getSink(inMemorySinkName!!) as InMemoryLogSink?
+            }
 
         // todo: show message if sink is missing
         if (null != inMemoryLogSink) {
@@ -68,8 +70,8 @@ class EventLogFragment : Fragment() {
 
             // Setup the list adapter
             list.adapter = EventRecyclerViewAdapter(
-                    viewLifecycleOwner,
-                    filteredList
+                viewLifecycleOwner,
+                filteredList
             )
 
         }
