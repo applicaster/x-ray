@@ -1,5 +1,7 @@
 # General Purpose Logger
 
+![Logo](docs/art/xray_blue.png)
+
 ## Overview
 
 Library provides general purpose logging and reporting facilities for Android, iOS, and React Native.
