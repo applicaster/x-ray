@@ -48,6 +48,9 @@ public class FileJSON: BaseSink, Storable {
         guard let url = fileURL else { return }
         deleteLogFileIfNeeded(url: url)
         let dict = event.toDictionary()
+        guard JSONSerialization.isValidJSONObject(dict) else {
+            return
+        }
         var jsonEvents = getEvents()
         jsonEvents.append(dict)
 
