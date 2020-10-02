@@ -82,4 +82,19 @@ class FileManagerHelper {
             return false
         }
     }
+
+    public class func fileSizeInMB(forURL url: URL) -> Double? {
+        let mbInBytes = 0.000001
+        do {
+            // return [FileAttributeKey : Any]
+            let attr = try FileManager.default.attributesOfItem(atPath: url.path)
+            if let fileSize = attr[FileAttributeKey.size] as? Double {
+                return fileSize * mbInBytes
+            }
+
+        } catch {
+            print("Error: \(error)")
+        }
+        return nil
+    }
 }
