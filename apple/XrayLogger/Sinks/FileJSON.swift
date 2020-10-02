@@ -78,7 +78,7 @@ public class FileJSON: BaseSink, Storable {
         }
     }
 
-    public func isFileSizeLimitRiched(url: URL) -> Bool {
+    private func isFileSizeLimitRiched(url: URL) -> Bool {
         guard let maxLogFileSizeInMB = maxLogFileSizeInMB,
             let fileSizeInMB = FileManagerHelper.fileSizeInMB(forURL: url),
             fileSizeInMB > maxLogFileSizeInMB else {
@@ -87,7 +87,7 @@ public class FileJSON: BaseSink, Storable {
         return true
     }
 
-    public func applicationHasNewVersion() -> String? {
+    private func applicationHasNewVersion() -> String? {
         guard
             let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
         else {
@@ -99,7 +99,7 @@ public class FileJSON: BaseSink, Storable {
         return currentApplicationVersion != appVersion ? appVersion : nil
     }
 
-    public func updateApplicationVersionInUserDefaults() {
+    private func updateApplicationVersionInUserDefaults() {
         guard let newApplicationVersion = applicationHasNewVersion()
         else {
             return
