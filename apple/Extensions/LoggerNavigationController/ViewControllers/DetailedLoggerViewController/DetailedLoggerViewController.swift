@@ -109,8 +109,6 @@ extension DetailedLoggerViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier,
                                                  for: indexPath)
 
-        cell.textLabel?.numberOfLines = 0
-
         if indexPath.row == 0 {
             updateTypeCell(indexPath: indexPath,
                            cell: cell)
@@ -177,6 +175,7 @@ extension DetailedLoggerViewController: UITableViewDelegate {
 extension DetailedLoggerViewController {
     func updateTypeCell(indexPath: IndexPath,
                         cell: UITableViewCell) {
+        cell.textLabel?.numberOfLines = 0
         cell.textLabel?.textColor = UIColor.black
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         cell.textLabel?.text = DetailedLoggerSections(rawValue: indexPath.section)?.toString()
@@ -215,6 +214,7 @@ extension DetailedLoggerViewController {
 
     func updateDetailCell(indexPath: IndexPath,
                           cell: UITableViewCell) {
+        cell.textLabel?.numberOfLines = 0
         cell.textLabel?.textColor = UIColor.black
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
         cell.accessoryType = .none

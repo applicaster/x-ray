@@ -24,7 +24,12 @@ class DetailedObjectLoggerViewController: UIViewController, MFMailComposeViewCon
     var dateString: String?
 
     var event: Event?
-    var dataObject: Any?
+    var dataObject: Any? {
+        didSet {
+            dataSource = SectionDataSourceHelper.prepareDataSource(dataObject: dataObject)
+        }
+    }
+
     var dataSource: [SectionModel] = []
     override init(nibName nibNameOrNil: String?,
                   bundle nibBundleOrNil: Bundle?) {
@@ -42,11 +47,6 @@ class DetailedObjectLoggerViewController: UIViewController, MFMailComposeViewCon
         prepareUI()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        prepareDataSource()
-    }
-
     func prepareUI() {
         dateLabel.text = dateString
         loggerTypeView.backgroundColor = event?.level.toColor()
@@ -56,73 +56,12 @@ class DetailedObjectLoggerViewController: UIViewController, MFMailComposeViewCon
             logTypeLabel.textColor = event.level.toColor()
         }
     }
-
-    func prepareDataSource() {
-        if let dataDictionary = dataObject as? [String: Any] {
-            dataSource = prepareDataSourceDictionary(dataDicionary: dataDictionary)
-        } else if let dataArray = dataObject as? [Any] {
-            dataSource = prepareDataSourceArray(dataArray: dataArray)
-        }
-    }
-
-    func prepareDataSourceDictionary(dataDicionary: [String: Any]) -> [SectionModel] {
-        var newDataSource: [SectionModel] = []
-        let noDataText = "No data availible"
-
-        for (key, value) in dataDicionary {
-            var sectionModel = SectionModel()
-            sectionModel.key = key
-            if let value = value as? [String] {
-                sectionModel.dataObject = value
-                sectionModel.value = "Items: \(value.count)"
-            } else if let value = value as? [String: Any] {
-                sectionModel.dataObject = value
-                sectionModel.value = "Items: \(value.count)"
-            } else if let value = value as? String {
-                sectionModel.value = value.count > 0 ? value : noDataText
-            } else if let value = value as? NSNumber {
-                let stringValue = value.stringValue
-                sectionModel.value = stringValue.count > 0 ? stringValue : noDataText
-            }
-            newDataSource.append(sectionModel)
-        }
-        return newDataSource
-    }
-
-    func prepareDataSourceArray(dataArray: [Any]) -> [SectionModel] {
-        var newDataSource: [SectionModel] = []
-        let noDataText = "No data availible"
-
-        for value in dataArray {
-            var sectionModel = SectionModel()
-            if let value = value as? [String] {
-                sectionModel.value = "Items: \(value.count)"
-                if value.count > 0 {
-                    sectionModel.dataObject = value
-                }
-            } else if let value = value as? [String: Any] {
-                sectionModel.value = "Items: \(value.count)"
-                if value.count > 0 {
-                    sectionModel.dataObject = value
-                }
-            } else if let value = value as? String {
-                sectionModel.key = value.count > 0 ? value : noDataText
-            } else if let value = value as? NSNumber {
-                let stringValue = value.stringValue
-                sectionModel.key = stringValue.count > 0 ? stringValue : noDataText
-            }
-            newDataSource.append(sectionModel)
-        }
-        return newDataSource
-    }
 }
 
 extension DetailedObjectLoggerViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier,
                                                  for: indexPath)
-
-        cell.textLabel?.numberOfLines = 0
 
         if indexPath.row == 0 {
             updateTypeCell(indexPath: indexPath,
@@ -171,6 +110,7 @@ extension DetailedObjectLoggerViewController {
     func updateTypeCell(indexPath: IndexPath,
                         cell: UITableViewCell) {
         let sectionData = dataSource[indexPath.section]
+        cell.textLabel?.numberOfLines = 0
         cell.textLabel?.textColor = UIColor.black
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         cell.textLabel?.text = sectionData.key
@@ -185,7 +125,7 @@ extension DetailedObjectLoggerViewController {
     func updateDetailCell(indexPath: IndexPath,
                           cell: UITableViewCell) {
         let sectionData = dataSource[indexPath.section]
-
+        cell.textLabel?.numberOfLines = 0
         cell.textLabel?.textColor = UIColor.black
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
         cell.accessoryType = .none
