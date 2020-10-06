@@ -9,7 +9,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DetailedLoggerViewController" customModule="LoggerInfo" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DetailedObjectLoggerViewController" customModule="LoggerInfo" customModuleProvider="target">
             <connections>
                 <outlet property="backgroundDataView" destination="LjJ-st-Enm" id="0Kd-M2-OFe"/>
                 <outlet property="dateLabel" destination="e7Q-ym-nNZ" id="cBA-yY-5Zq"/>
@@ -86,19 +86,7 @@
                     <constraints>
                         <constraint firstAttribute="height" constant="49" id="eYe-ga-SGy"/>
                     </constraints>
-                    <items>
-                        <barButtonItem title="Export Single Log" id="EcJ-V8-Set">
-                            <connections>
-                                <action selector="exportData:" destination="-1" id="zm1-05-Psb"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="6mv-5v-BxO"/>
-                        <barButtonItem title="Read JSON" id="d2v-R8-ZPy" userLabel="Read In JSON">
-                            <connections>
-                                <action selector="readJSON:" destination="-1" id="Zah-9x-3mY"/>
-                            </connections>
-                        </barButtonItem>
-                    </items>
+                    <items/>
                 </toolbar>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>

@@ -9,13 +9,13 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DetailedLoggerViewController" customModule="LoggerInfo" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DetailedLoggerJSONViewController" customModule="LoggerInfo" customModuleProvider="target">
             <connections>
                 <outlet property="backgroundDataView" destination="LjJ-st-Enm" id="0Kd-M2-OFe"/>
                 <outlet property="dateLabel" destination="e7Q-ym-nNZ" id="cBA-yY-5Zq"/>
+                <outlet property="jsonTextView" destination="RoB-bJ-fFf" id="Psg-YU-2rJ"/>
                 <outlet property="logTypeLabel" destination="9VF-yU-owu" id="Kh4-so-jr6"/>
                 <outlet property="loggerTypeView" destination="l2l-Pq-Igi" id="HsG-qT-Dsn"/>
-                <outlet property="tableView" destination="r04-JG-SMT" id="XVt-b4-S1c"/>
                 <outlet property="view" destination="iN0-l3-epB" id="qO7-X7-Nfb"/>
             </connections>
         </placeholder>
@@ -57,28 +57,27 @@
                                 <constraint firstAttribute="height" constant="25" id="yJD-sc-jo9"/>
                             </constraints>
                         </stackView>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="8" sectionFooterHeight="8" translatesAutoresizingMaskIntoConstraints="NO" id="r04-JG-SMT">
-                            <rect key="frame" x="25" y="48" width="361" height="601"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <connections>
-                                <outlet property="dataSource" destination="-1" id="JU4-bB-evq"/>
-                                <outlet property="delegate" destination="-1" id="hmX-2l-vTF"/>
-                            </connections>
-                        </tableView>
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="RoB-bJ-fFf">
+                            <rect key="frame" x="23" y="48" width="363" height="601"/>
+                            <color key="backgroundColor" red="0.98039215690000003" green="0.98039215690000003" blue="0.98039215690000003" alpha="1" colorSpace="calibratedRGB"/>
+                            <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                            <color key="textColor" systemColor="darkTextColor"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                            <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                        </textView>
                     </subviews>
                     <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="ucI-Ty-YoN" secondAttribute="trailing" constant="20" id="4Yd-9J-YNF"/>
                         <constraint firstItem="ucI-Ty-YoN" firstAttribute="leading" secondItem="l2l-Pq-Igi" secondAttribute="trailing" constant="10" id="6jk-fk-dwn"/>
+                        <constraint firstAttribute="trailing" secondItem="RoB-bJ-fFf" secondAttribute="trailing" constant="8" id="Aq6-rC-sDs"/>
                         <constraint firstItem="l2l-Pq-Igi" firstAttribute="leading" secondItem="LjJ-st-Enm" secondAttribute="leading" id="OI0-YZ-3Q8"/>
-                        <constraint firstAttribute="bottom" secondItem="r04-JG-SMT" secondAttribute="bottom" constant="8" id="W7n-ND-Zzg"/>
-                        <constraint firstAttribute="trailing" secondItem="r04-JG-SMT" secondAttribute="trailing" constant="8" id="ZUp-SP-vwp"/>
                         <constraint firstItem="l2l-Pq-Igi" firstAttribute="top" secondItem="LjJ-st-Enm" secondAttribute="top" id="Zht-qL-xCC"/>
                         <constraint firstItem="ucI-Ty-YoN" firstAttribute="top" secondItem="LjJ-st-Enm" secondAttribute="top" constant="15" id="bkz-YE-kNe"/>
-                        <constraint firstItem="r04-JG-SMT" firstAttribute="leading" secondItem="LjJ-st-Enm" secondAttribute="leading" constant="25" id="hTa-tn-2GE"/>
-                        <constraint firstItem="r04-JG-SMT" firstAttribute="top" secondItem="ucI-Ty-YoN" secondAttribute="bottom" constant="8" symbolic="YES" id="iJj-de-JxB"/>
+                        <constraint firstItem="RoB-bJ-fFf" firstAttribute="top" secondItem="ucI-Ty-YoN" secondAttribute="bottom" constant="8" id="kQT-RL-IaT"/>
+                        <constraint firstItem="RoB-bJ-fFf" firstAttribute="leading" secondItem="l2l-Pq-Igi" secondAttribute="trailing" constant="8" id="mAK-ot-73w"/>
                         <constraint firstAttribute="bottom" secondItem="l2l-Pq-Igi" secondAttribute="bottom" id="rcM-Ok-1Iv"/>
+                        <constraint firstAttribute="bottom" secondItem="RoB-bJ-fFf" secondAttribute="bottom" constant="8" id="sbN-lx-e0z"/>
                     </constraints>
                 </view>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qbC-MK-2vl">
@@ -90,12 +89,6 @@
                         <barButtonItem title="Export Single Log" id="EcJ-V8-Set">
                             <connections>
                                 <action selector="exportData:" destination="-1" id="zm1-05-Psb"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="6mv-5v-BxO"/>
-                        <barButtonItem title="Read JSON" id="d2v-R8-ZPy" userLabel="Read In JSON">
-                            <connections>
-                                <action selector="readJSON:" destination="-1" id="Zah-9x-3mY"/>
                             </connections>
                         </barButtonItem>
                     </items>
@@ -116,6 +109,9 @@
         </view>
     </objects>
     <resources>
+        <systemColor name="darkTextColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
         <systemColor name="systemPurpleColor">
             <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
