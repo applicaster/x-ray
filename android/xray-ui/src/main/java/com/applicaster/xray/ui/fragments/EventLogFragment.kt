@@ -2,13 +2,13 @@ package com.applicaster.xray.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.applicaster.plugin.xray.R
@@ -72,7 +72,7 @@ class EventLogFragment : Fragment() {
                         position: Int,
                         id: Long
                     ) {
-                        filteredList.filter = LogLevel.values()[position]
+                        filteredList.level = LogLevel.values()[position]
                     }
                 }
             }
@@ -85,6 +85,48 @@ class EventLogFragment : Fragment() {
                 )
             }
 
+            val filter = view.findViewById<LinearLayout>(R.id.cnt_filter)
+            val bntFilter = view.findViewById<ToggleButton>(R.id.tb_filter)
+            bntFilter
+                .setOnCheckedChangeListener { _, isChecked ->
+                    filter.visibility = if (isChecked) View.VISIBLE else View.GONE
+                }
+
+            val edSubsystem = filter.findViewById<EditText>(R.id.ed_subsystem)
+            edSubsystem.addTextChangedListener(object :
+                TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) = Unit
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) =
+                    Unit
+
+                override fun afterTextChanged(s: Editable?) {
+                    filteredList.subsystem = s.toString()
+                }
+            })
+
+            val edCategory = filter.findViewById<EditText>(R.id.ed_category)
+            edCategory.addTextChangedListener(object :
+                TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) = Unit
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) =
+                    Unit
+
+                override fun afterTextChanged(s: Editable?) {
+                    filteredList.category = s.toString()
+                }
+            })
         }
         view.setTag(R.id.fragment_title_tag, getString(R.string.tab_title_events))
         return view
