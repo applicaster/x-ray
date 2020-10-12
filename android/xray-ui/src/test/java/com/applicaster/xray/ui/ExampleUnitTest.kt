@@ -1,4 +1,4 @@
-package com.applicaster.plugin.xray
+package com.applicaster.xray.ui
 
 import org.junit.Test
 

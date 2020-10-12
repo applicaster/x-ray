@@ -11,9 +11,9 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
-import com.applicaster.plugin.xray.R
 import com.applicaster.xray.core.Core
 import com.applicaster.xray.core.LogLevel
+import com.applicaster.xray.ui.R
 import com.applicaster.xray.ui.adapters.EventRecyclerViewAdapter
 import com.applicaster.xray.ui.sinks.InMemoryLogSink
 import com.applicaster.xray.ui.utility.FilteredEventList

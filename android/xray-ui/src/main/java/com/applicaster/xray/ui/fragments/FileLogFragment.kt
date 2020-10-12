@@ -12,7 +12,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import com.applicaster.plugin.xray.R
+import com.applicaster.xray.ui.R
 import com.applicaster.xray.crashreporter.Reporting
 import java.io.File
 

@@ -16,7 +16,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import com.applicaster.plugin.xray.R
+import com.applicaster.xray.ui.R
 import com.applicaster.xray.core.Event
 import com.applicaster.xray.ui.utility.format
 import com.google.gson.GsonBuilder

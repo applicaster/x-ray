@@ -9,7 +9,7 @@ import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.PagerTitleStrip;
 import androidx.viewpager.widget.ViewPager;
 
-import com.applicaster.plugin.xray.R;
+import com.applicaster.xray.ui.R;
 
 /**
  * Created by ink on 2017-05-08.
