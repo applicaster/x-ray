@@ -61,6 +61,12 @@ class FileLogFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.xray_fragment_log, container, false)
+
+        arguments?.let {
+            // override value from xml
+            fileName = it.getString(ARG_FILE_NAME, fileName)
+        }
+
         file = if (TextUtils.isEmpty(fileName)) null else activity!!.getFileStreamPath(fileName)
         logView = view.findViewById(R.id.lbl_log)
         btnSend = view.findViewById(R.id.btn_send)
@@ -144,6 +150,16 @@ class FileLogFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance() = FileLogFragment()
+
+        @JvmStatic
+        fun newInstance(fileName: String) = FileLogFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARG_FILE_NAME, fileName)
+            }
+        }
+
+        private const val ARG_FILE_NAME: String = "file_name"
+
         private const val UPDATE_DELAY = 100L
         private const val CREATE_SCAN_INTERVAL = 500L
         private const val MSG_EMPTY = "[Empty]"

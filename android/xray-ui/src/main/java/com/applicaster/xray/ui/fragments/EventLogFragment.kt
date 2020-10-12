@@ -35,11 +35,16 @@ class EventLogFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         val view = inflater.inflate(R.layout.xray_fragment_event_log_list, container, false)
+
+        arguments?.let {
+            // override value from xml
+            inMemorySinkName = it.getString(ARG_SINK_NAME, inMemorySinkName)
+        }
 
         // We expect our example Plugin to provide this sink as InMemoryLogSink
         val inMemoryLogSink =
@@ -57,9 +62,9 @@ class EventLogFragment : Fragment() {
             // Setup log level filter spinner
             view.findViewById<Spinner>(R.id.cb_filter).apply {
                 adapter = ArrayAdapter(
-                    context,
-                    android.R.layout.simple_list_item_1,
-                    LogLevel.values()
+                        context,
+                        android.R.layout.simple_list_item_1,
+                        LogLevel.values()
                 )
                 setSelection(LogLevel.info.level)
                 onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -67,10 +72,10 @@ class EventLogFragment : Fragment() {
                     }
 
                     override fun onItemSelected(
-                        parent: AdapterView<*>?,
-                        view: View?,
-                        position: Int,
-                        id: Long
+                            parent: AdapterView<*>?,
+                            view: View?,
+                            position: Int,
+                            id: Long
                     ) {
                         filteredList.level = LogLevel.values()[position]
                     }
@@ -80,8 +85,8 @@ class EventLogFragment : Fragment() {
             // Setup the list adapter
             view.findViewById<RecyclerView>(R.id.list).apply {
                 adapter = EventRecyclerViewAdapter(
-                    viewLifecycleOwner,
-                    filteredList
+                        viewLifecycleOwner,
+                        filteredList
                 )
             }
 
@@ -94,16 +99,16 @@ class EventLogFragment : Fragment() {
 
             val edSubsystem = filter.findViewById<EditText>(R.id.ed_subsystem)
             edSubsystem.addTextChangedListener(object :
-                TextWatcher {
+                    TextWatcher {
                 override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
+                        s: CharSequence?,
+                        start: Int,
+                        count: Int,
+                        after: Int
                 ) = Unit
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) =
-                    Unit
+                        Unit
 
                 override fun afterTextChanged(s: Editable?) {
                     filteredList.subsystem = s.toString()
@@ -112,16 +117,16 @@ class EventLogFragment : Fragment() {
 
             val edCategory = filter.findViewById<EditText>(R.id.ed_category)
             edCategory.addTextChangedListener(object :
-                TextWatcher {
+                    TextWatcher {
                 override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
+                        s: CharSequence?,
+                        start: Int,
+                        count: Int,
+                        after: Int
                 ) = Unit
 
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) =
-                    Unit
+                        Unit
 
                 override fun afterTextChanged(s: Editable?) {
                     filteredList.category = s.toString()
@@ -133,8 +138,16 @@ class EventLogFragment : Fragment() {
     }
 
     companion object {
-
         @JvmStatic
         fun newInstance() = EventLogFragment()
+
+        @JvmStatic
+        fun newInstance(sinkName: String) = EventLogFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARG_SINK_NAME, sinkName)
+            }
+        }
+
+        private const val ARG_SINK_NAME: String = "sink_name"
     }
 }
