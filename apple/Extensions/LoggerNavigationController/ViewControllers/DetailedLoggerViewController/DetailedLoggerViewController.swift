@@ -218,6 +218,7 @@ extension DetailedLoggerViewController {
         cell.textLabel?.textColor = UIColor.black
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
         cell.accessoryType = .none
+        cell.backgroundColor = UIColor.clear
 
         let noDataText = "No data availible"
         guard let event = event,

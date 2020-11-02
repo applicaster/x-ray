@@ -130,5 +130,6 @@ extension DetailedObjectLoggerViewController {
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
         cell.accessoryType = .none
         cell.textLabel?.text = sectionData.value
+        cell.backgroundColor = UIColor.clear
     }
 }
