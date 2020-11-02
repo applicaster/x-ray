@@ -175,6 +175,7 @@ extension DetailedLoggerViewController: UITableViewDelegate {
 extension DetailedLoggerViewController {
     func updateTypeCell(indexPath: IndexPath,
                         cell: UITableViewCell) {
+        cell.backgroundColor = UIColor.clear
         cell.textLabel?.numberOfLines = 0
         cell.textLabel?.textColor = UIColor.black
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 20)

@@ -110,6 +110,7 @@ extension DetailedObjectLoggerViewController {
     func updateTypeCell(indexPath: IndexPath,
                         cell: UITableViewCell) {
         let sectionData = dataSource[indexPath.section]
+        cell.backgroundColor = UIColor.clear
         cell.textLabel?.numberOfLines = 0
         cell.textLabel?.textColor = UIColor.black
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 20)
