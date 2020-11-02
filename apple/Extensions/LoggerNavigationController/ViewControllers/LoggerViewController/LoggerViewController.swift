@@ -169,7 +169,7 @@ extension LoggerViewController: SortLogsViewDelegate {
         return originalDataSource.filter { (event) -> Bool in
             if let selected = sortParams[event.level.rawValue] {
                 if let subSystemFilter = subSystemFilter {
-                    return event.subsystem.contains(subSystemFilter) && selected == true
+                    return event.subsystem.lowercased().contains(subSystemFilter) && selected == true
                 } else {
                     return selected
                 }
