@@ -23,7 +23,7 @@ public class BaseSink: NSObject, SinkProtocol {
     public func log(event: Event) {
         // Shoulds be implemented on top lovel
     }
-
+    
     public static func == (lhs: BaseSink, rhs: BaseSink) -> Bool {
         return ObjectIdentifier(lhs) == ObjectIdentifier(rhs)
     }

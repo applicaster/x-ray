@@ -9,5 +9,5 @@
 import Foundation
 
 public protocol Storable {
-    var fileURL:URL? { get }
+    func generateLogsToSingleFileUrl(_ completion: ((URL?) -> ())?)
 }
