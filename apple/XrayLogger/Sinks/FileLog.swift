@@ -10,6 +10,7 @@ import Foundation
 
 public class FileLog: BaseSink {
     fileprivate var logsFolderURL: URL?
+    fileprivate let singleLogsFileName = "XrayTxtLogs.txt"
     let fileManager = FileManager.default
 
     public init(folderName: String? = nil) {
@@ -43,7 +44,7 @@ public class FileLog: BaseSink {
                                          url: fileUrl,
                                          sync: false)
     }
-    
+
     public func deleteLogsFolderContent(at path: URL) {
         guard let filePaths = try? fileManager.contentsOfDirectory(at: path,
                                                                    includingPropertiesForKeys: nil,
@@ -57,10 +58,8 @@ public class FileLog: BaseSink {
     }
 }
 
-extension FileLog : Storable {
+extension FileLog: Storable {
     public func generateLogsToSingleFileUrl(_ completion: ((URL?) -> Void)?) {
-        let singleLogsFileName = "XrayTxtLogs.txt"
-
         guard let logsFolderURL = logsFolderURL,
             let documentsFolder = fileManager.urls(for: .documentDirectory,
                                                    in: .userDomainMask).first,
@@ -84,6 +83,16 @@ extension FileLog : Storable {
                                                    sync: false)
 
         completion?(success ? singleLogsFileUrl : nil)
+    }
+
+    public func deleteSingleFileUrl() {
+        guard let documentsFolder = fileManager.urls(for: .documentDirectory,
+                                                     in: .userDomainMask).first else {
+            return
+        }
+        let singleLogsFileUrl = documentsFolder.appendingPathComponent(singleLogsFileName,
+                                                                       isDirectory: false)
+        _ = FileManagerHelper.deleteLogFile(url: singleLogsFileUrl)
     }
 
     fileprivate func getEventLine(fromFile fileUrl: URL) -> String {

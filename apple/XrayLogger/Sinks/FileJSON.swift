@@ -10,6 +10,7 @@ import Foundation
 
 public class FileJSON: BaseSink {
     fileprivate var logsFolderURL: URL?
+    fileprivate let singleLogsFileName = "XrayJsonLogs.json"
     public var maxLogFileSizeInMB: Double? = 20
     public var deleteLogsFolderContentForNewAppVersion = true
     public var syncAfterEachWrite: Bool = false
@@ -131,7 +132,6 @@ public class FileJSON: BaseSink {
 
 extension FileJSON: Storable {
     public func generateLogsToSingleFileUrl(_ completion: ((URL?) -> Void)?) {
-        let singleLogsFileName = "XrayJsonLogs.json"
 
         guard let logsFolderURL = logsFolderURL,
             let documentsFolder = fileManager.urls(for: .documentDirectory,
@@ -164,6 +164,16 @@ extension FileJSON: Storable {
         }
 
         completion?(success ? singleLogsFileUrl : nil)
+    }
+    
+    public func deleteSingleFileUrl() {
+        guard let documentsFolder = fileManager.urls(for: .documentDirectory,
+                                                     in: .userDomainMask).first else {
+            return
+        }
+        let singleLogsFileUrl = documentsFolder.appendingPathComponent(singleLogsFileName,
+                                                                       isDirectory: false)
+        _ = FileManagerHelper.deleteLogFile(url: singleLogsFileUrl)
     }
 
     fileprivate func getEvent(fromFile fileUrl: URL) -> [String: Any] {

@@ -10,4 +10,5 @@ import Foundation
 
 public protocol Storable {
     func generateLogsToSingleFileUrl(_ completion: ((URL?) -> ())?)
+    func deleteSingleFileUrl()
 }

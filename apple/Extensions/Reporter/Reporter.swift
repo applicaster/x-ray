@@ -11,6 +11,7 @@ import MessageUI
 
 public protocol StorableSinkDelegate {
     func getLogFileUrl(_ completion: ((URL?) -> ())?)
+    func deleteLogFile()
 }
 
 public class Reporter {
@@ -39,7 +40,10 @@ public class Reporter {
                 sharedInstance.email.requestSendEmail(emails: sharedEmails,
                                                       sharedFileURL: url,
                                                       contexts: sharedContexts,
-                                                      attachments: nil)
+                                                      attachments: nil,
+                                                      completion: {
+                                                        sharedLogFileSinkDelegate?.deleteLogFile()
+                                                      })
             }
         })
         
@@ -54,6 +58,9 @@ public class Reporter {
         sharedInstance.email.requestSendEmail(emails: emails,
                                               sharedFileURL: nil,
                                               contexts: sharedContexts,
-                                              attachments: attachments)
+                                              attachments: attachments,
+                                              completion: {
+                                                sharedLogFileSinkDelegate?.deleteLogFile()
+                                              })
     }
 }

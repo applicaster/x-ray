@@ -16,7 +16,8 @@ class Email: NSObject, MFMailComposeViewControllerDelegate {
     public var emailContextData: [String: AnyObject] = [:]
     public var emailAttachments: [EmailAttachment] = []
     var mailComposeViewController: MFMailComposeViewController?
-
+    var mailComposerCompletion: (() -> ())?
+    
     deinit {
         print("Deinit")
     }
@@ -24,27 +25,32 @@ class Email: NSObject, MFMailComposeViewControllerDelegate {
     func requestSendEmail(emails: [String],
                           sharedFileURL: URL? = nil,
                           contexts: [String: Any]?,
-                          attachments: [EmailAttachment]? = nil) {
+                          attachments: [EmailAttachment]? = nil,
+                          completion: (() -> ())?) {
         if (mailComposeViewController?.presentedViewController) != nil {
             mailComposeViewController?.dismiss(animated: false, completion: { [weak self] in
                 guard let self = self else { return }
                 self.createMailComposerViewController(emails: emails,
                                                       sharedFileURL: sharedFileURL,
                                                       contexts: contexts,
-                                                      attachments: attachments)
+                                                      attachments: attachments,
+                                                      completion: completion)
             })
         } else {
             createMailComposerViewController(emails: emails,
                                              sharedFileURL: sharedFileURL,
                                              contexts: contexts,
-                                             attachments: attachments)
+                                             attachments: attachments,
+                                             completion: completion)
         }
     }
 
     func createMailComposerViewController(emails: [String],
                                           sharedFileURL: URL? = nil,
                                           contexts: [String: Any]?,
-                                          attachments: [EmailAttachment]? = nil) {
+                                          attachments: [EmailAttachment]? = nil,
+                                          completion: (() -> ())?) {
+        mailComposerCompletion = completion
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
             mail.setSubject(emailSubject)
@@ -74,6 +80,7 @@ class Email: NSObject, MFMailComposeViewControllerDelegate {
 
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             presentController(vc: alert)
+            mailComposerCompletion?()
         }
     }
 
@@ -101,6 +108,7 @@ class Email: NSObject, MFMailComposeViewControllerDelegate {
     func mailComposeController(_ controller: MFMailComposeViewController,
                                didFinishWith result: MFMailComposeResult,
                                error: Error?) {
+        mailComposerCompletion?()
         controller.dismiss(animated: true)
     }
 
