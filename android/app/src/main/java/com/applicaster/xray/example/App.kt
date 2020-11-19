@@ -32,8 +32,9 @@ class App : Application() {
         val fileLogSink =
             PackageFileLogSink(
                 this,
-                "default.log"
-            );
+                "default.log",
+                256 * 1024
+            )
         val errorFileLogSink =
             PackageFileLogSink(
                 this,
