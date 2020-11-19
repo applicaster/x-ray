@@ -34,5 +34,14 @@
             android:layout_height="wrap_content"
             android:text="Send" />
 
+        <TextView
+            android:id="@+id/lbl_log_size"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:focusable="true"
+            android:paddingRight="16dp"
+            android:gravity="center_vertical|right"
+            tools:text="256kb. Tap to reload" />
     </LinearLayout>
 </LinearLayout>

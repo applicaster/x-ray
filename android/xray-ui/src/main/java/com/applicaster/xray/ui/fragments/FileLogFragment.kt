@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.FileObserver
 import android.text.TextUtils
+import android.text.format.Formatter
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,7 @@ class FileLogFragment : Fragment() {
     private var file: File? = null
     private var observer: FileObserver? = null
 
+    private var lblLigSize: TextView? = null
     private var logView: TextView? = null
     private var btnClear: Button? = null
     private var btnSend: Button? = null
@@ -73,13 +75,15 @@ class FileLogFragment : Fragment() {
         btnSend?.setOnClickListener { send() }
         btnClear = view.findViewById(R.id.btn_clear)
         btnClear?.setOnClickListener { clear() }
+        lblLigSize = view.findViewById(R.id.lbl_log_size)
+        lblLigSize?.setOnClickListener { reloadLog(true) }
         if(null != file) {
             view.setTag(R.id.fragment_title_tag, file!!.name)
         }
         return view
     }
 
-    private fun reloadLog() {
+    private fun reloadLog(forceLoad: Boolean = false) {
         if(!lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
             return
         }
@@ -89,13 +93,29 @@ class FileLogFragment : Fragment() {
         var hasLog = false
         if (null == file) {
             logView?.text = MSG_FILE_NOT_SPECIFIED
+            lblLigSize?.text = ""
         } else if (!file!!.exists()) {
             logView?.text = MSG_NOT_FOUND
+            lblLigSize?.text = ""
             logView?.postDelayed(fileCreateListener, CREATE_SCAN_INTERVAL)
         } else {
-            val log = file!!.readText(Charsets.UTF_8)
-            hasLog = !TextUtils.isEmpty(log)
-            logView?.text = if (hasLog) log else MSG_EMPTY
+            val fileSize = Formatter.formatFileSize(lblLigSize!!.context, file!!.length())
+            if(forceLoad || file!!.length() < SIZE_LIMIT) {
+                lblLigSize!!.text = fileSize
+                val log = file!!.readText(Charsets.UTF_8)
+                hasLog = !TextUtils.isEmpty(log)
+                logView?.text = if (hasLog) log else MSG_EMPTY
+            } else {
+                hasLog = true
+                // do not update log text view
+                lblLigSize!!.text = "$fileSize.\nLog is too big, tap here to load."
+                if(TextUtils.isEmpty(logView?.text)) {
+                    logView?.text = "Log file is bigger than ${Formatter.formatFileSize(lblLigSize!!.context, SIZE_LIMIT)}.\nAuto load disabled."
+                }
+            }
+            lblLigSize!!.setTextColor(lblLigSize!!.resources.getColor(
+                if(file!!.length() < SIZE_LIMIT) android.R.color.black
+                else android.R.color.holo_red_dark))
             startFileObserver() // can be called multiple times, no problem
         }
         btnSend?.isEnabled = hasLog
@@ -165,5 +185,8 @@ class FileLogFragment : Fragment() {
         private const val MSG_EMPTY = "[Empty]"
         private const val MSG_NOT_FOUND = "[Not found]"
         private const val MSG_FILE_NOT_SPECIFIED = "[File not specified]"
+
+        // max size that we will attempt to load automatically
+        private const val SIZE_LIMIT = 100 * 1024L
     }
 }
