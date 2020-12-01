@@ -29,7 +29,10 @@ object XRayNotification {
     private var errors = 0;
     private var warnings = 0;
 
-    fun show(context: Context, notificationId: Int, actions: Map<String, PendingIntent>? = null) {
+    fun show(context: Context,
+             notificationId: Int,
+             pi: PendingIntent? = null,
+             actions: Map<String, PendingIntent>? = null) {
         if (-1 != currentNotificationId) {
             hide(context)
         }
@@ -55,30 +58,22 @@ object XRayNotification {
             channelCreated = true
         }
 
-        val intent = Intent(context, NotificationReceiver::class.java)
-            .setAction("com.applicaster.xray.show.ui")
-
-        val pi = PendingIntent.getBroadcast(
-            context,
-            requestCode,
-            intent,
-            PendingIntent.FLAG_CANCEL_CURRENT
-        )
         val notificationBuilder =
-            NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_xray_notification)
-                .setLargeIcon(
-                    BitmapFactory.decodeResource(
-                        context.resources,
-                        R.drawable.ic_xray_notification
-                    )
-                )
-                .setContentTitle("X-Ray logger")
-                .setOnlyAlertOnce(true)
-                .setContentIntent(pi)
-                .setAutoCancel(false)
-                .setShowWhen(false)
-                .setSound(null)
+                NotificationCompat.Builder(context, CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_xray_notification)
+                        .setLargeIcon(
+                                BitmapFactory.decodeResource(
+                                        context.resources,
+                                        R.drawable.ic_xray_notification
+                                )
+                        )
+                        .setContentTitle("X-Ray logger")
+                        .setOnlyAlertOnce(true)
+                        .setContentIntent(pi
+                                ?: NotificationReceiver.getIntent(context, "com.applicaster.xray.show.ui"))
+                        .setAutoCancel(false)
+                        .setShowWhen(false)
+                        .setSound(null)
 
         actions?.forEach {
             notificationBuilder.addAction(0, it.key, it.value)
@@ -112,10 +107,10 @@ object XRayNotification {
     ) {
         val uiHandler = Handler(Looper.getMainLooper())
         // must be Runnable so removeCallbacks will work
-        val printErrors: Runnable = Runnable {
+        val printErrors = Runnable {
             // https://emojipedia.org/prohibited/
             // https://emojipedia.org/warning/
-            notificationBuilder.setContentText("\uD83D\uDEAB $errors ⚠️ $warnings️")
+            notificationBuilder.setContentText("\uD83D\uDEAB$errors \u26A0\uFE0F$warnings️")
             notificationManager.notify(notificationId, notificationBuilder.build())
         }
 
@@ -127,7 +122,7 @@ object XRayNotification {
             }
             // remove old runnable in case we have more than one error in single ui loop update
             uiHandler.removeCallbacks(printErrors)
-            uiHandler.post(printErrors)
+            uiHandler.postDelayed(printErrors, 10) // delay a bit in case errors will come in batch
         }
     }
 
