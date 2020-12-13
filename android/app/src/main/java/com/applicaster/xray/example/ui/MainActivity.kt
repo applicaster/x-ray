@@ -3,7 +3,6 @@ package com.applicaster.xray.example.ui
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager.widget.ViewPager
 import com.applicaster.xray.android.routing.DefaultSinkFilter
 import com.applicaster.xray.core.Core
 import com.applicaster.xray.core.LogContext
@@ -14,15 +13,11 @@ import com.applicaster.xray.example.R
 import com.applicaster.xray.example.model.JavaTestClass
 import com.applicaster.xray.example.model.KotlinTestClass
 import com.applicaster.xray.formatters.message.reflactionformatter.NamedReflectionMessageFormatter
-import com.applicaster.xray.ui.adapters.ViewsPagerAdapter
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        findViewById<ViewPager>(R.id.pager)?.let {
-            it.adapter = ViewsPagerAdapter(it)
-        }
         findViewById<Button>(R.id.btn_log_some).setOnClickListener { logSomeEvents() }
         findViewById<Button>(R.id.btn_crash).setOnClickListener { throw Exception("Test crash") }
         // now when UI is ready, we can check for crash report
