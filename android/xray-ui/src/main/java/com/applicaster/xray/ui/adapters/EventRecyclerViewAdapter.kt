@@ -21,6 +21,7 @@ import com.applicaster.xray.core.Event
 import com.applicaster.xray.ui.utility.format
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.xray_fragment_event_log_entry.view.*
+import java.util.*
 
 
 class EventRecyclerViewAdapter(
@@ -31,6 +32,10 @@ class EventRecyclerViewAdapter(
     private var values: List<Event> = observableEventList.value!!
 
     private var gson = GsonBuilder().setPrettyPrinting().create()
+
+    // No IdentityHashSet available and we can't provide custom compare function in set in Java
+    // Comparing the entire Event is not needed, and we can't use indexes
+    private var expanded = IdentityHashMap<Event, Event>()
 
     init {
         observableEventList.observe(owner, this)
@@ -63,7 +68,7 @@ class EventRecyclerViewAdapter(
 
         // should be static, but its internal class
         private val colors = view.resources.getIntArray(R.array.log_levels)
-        private val DETAILS_HINT = "Tap for details..."
+        private val detailsHint = view.context.getString(R.string.xray_lbl_tap_for_details)
 
         init {
             // on long click copy to clipboard
@@ -84,10 +89,13 @@ class EventRecyclerViewAdapter(
             }
             // on short click show details if any
             view.setOnClickListener {
-                if (DETAILS_HINT == details.text && hasDetails(event!!))
+                if (detailsHint == details.text && hasDetails(event!!)) {
                     details.text = formatDetails(event!!)
-                else
-                    details.text = DETAILS_HINT
+                    expanded[event] = event
+                } else {
+                    details.text = detailsHint
+                    expanded.remove(event)
+                }
             }
         }
 
@@ -101,7 +109,7 @@ class EventRecyclerViewAdapter(
             subsystem.text = item.subsystem
             colorTag.setBackgroundColor(getColor(item))
             if(hasDetails(item)) {
-                details.text = DETAILS_HINT
+                details.text = if(expanded.contains(item)) formatDetails(item) else detailsHint
                 details.visibility = View.VISIBLE
             } else {
                 details.visibility = View.GONE
