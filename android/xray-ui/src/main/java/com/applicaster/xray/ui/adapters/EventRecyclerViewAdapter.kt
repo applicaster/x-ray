@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +17,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
-import com.applicaster.xray.ui.R
 import com.applicaster.xray.core.Event
+import com.applicaster.xray.ui.R
 import com.applicaster.xray.ui.utility.format
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.xray_fragment_event_log_entry.view.*
@@ -117,24 +118,33 @@ class EventRecyclerViewAdapter(
         }
 
         private fun hasDetails(item: Event) =
-            !item.data.isNullOrEmpty() || !item.context.isNullOrEmpty()
+            !item.data.isNullOrEmpty() || !item.context.isNullOrEmpty() || null != item.exception
 
         private fun getColor(item: Event) =
             if (item.level < colors.size) colors[item.level] else colors.last()
 
-        private fun formatDetails(event: Event): Spannable {
-            return SpannableStringBuilder().apply {
-                if(true == event.data?.isNotEmpty()) {
-                    bold { append("Data:\n") }
-                    append(gson.toJson(event.data))
+        private fun formatDetails(event: Event): Spannable = SpannableStringBuilder().apply {
+            if (true == event.data?.isNotEmpty()) {
+                bold { append("Data:\n") }
+                append(gson.toJson(event.data))
+            }
+            event.exception?.let { exception ->
+                if (isNotEmpty()) {
+                    append('\n')
                 }
-                if(true == event.context?.isNotEmpty()) {
-                    if(isNotEmpty()) {
-                        append('\n')
-                    }
-                    bold { append("Context:\n") }
-                    append(gson.toJson(event.context))
+                bold { append("Exception:\n") }
+                exception.message?.let { message ->
+                    append(message)
+                    append("\n")
                 }
+                append(Log.getStackTraceString(exception))
+            }
+            if (true == event.context?.isNotEmpty()) {
+                if (isNotEmpty()) {
+                    append('\n')
+                }
+                bold { append("Context:\n") }
+                append(gson.toJson(event.context))
             }
         }
 
