@@ -161,7 +161,7 @@ extension DetailedLoggerViewController: UITableViewDelegate {
                                                          animated: true)
             }
         case DetailedLoggerSections.exception:
-            if let exception = event.exception {
+            if let _ = event.exception {
                 detailedViewController.title = DetailedLoggerSections.exception.toString()
                 navigationController?.pushViewController(detailedViewController,
                                                          animated: true)

@@ -18,7 +18,7 @@ protocol SortLogsViewDelegate: class {
 struct SortLogsHelper {
     static func dataFromUserDefaults() -> [Int: Bool] {
         if let data = UserDefaults.standard.value(forKey: sortLogsStorageKey) as? Data,
-            let result = NSKeyedUnarchiver.unarchiveObject(with: data) as? [Int: Bool] {
+           let result = DataObject.loadContent(from: data) {
             return result
         } else {
             let newData: [Int: Bool] = [
@@ -34,7 +34,11 @@ struct SortLogsHelper {
     }
 
     static func saveDataToUserDefaults(dataToSave: [Int: Bool]) {
-        let data = NSKeyedArchiver.archivedData(withRootObject: dataToSave)
+        let dataObject = DataObject(content: dataToSave)
+        guard let data = dataObject.archiveContent() else {
+            return
+        }
+        
         UserDefaults.standard.set(data,
                                   forKey: sortLogsStorageKey)
     }
@@ -45,5 +49,34 @@ struct SortLogsHelper {
             return false
         }
         return isSelected
+    }
+}
+
+struct DataObject: Codable {
+    var content: [Int: Bool]
+
+    func archiveContent() -> Data? {
+        var retValue: Data?
+        do {
+            retValue = try JSONEncoder().encode(self)
+        }
+        catch {
+            // do nothing
+        }
+        return retValue
+    }
+
+    static func loadContent(from unarchivedObject: Data) -> [Int: Bool]? {
+        var retValue: [Int: Bool]?
+
+        do {
+            let object = try JSONDecoder().decode(DataObject.self, from: unarchivedObject)
+            retValue = object.content
+        }
+        catch {
+            // do nothing
+        }
+
+        return retValue
     }
 }
