@@ -9,14 +9,27 @@
 import UIKit
 import XrayLogger
 
-class FilterDataCell: UITableViewCell {
-    @IBOutlet weak var filterTypeButton: FilterButton!
-    @IBOutlet weak var textField: UITextField!
+protocol FilterDataCellDelegate: class {
+    func cellDidUpdated(filterData: DataSortFilterModel)
+}
 
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        let padding = UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0)
-        contentView.frame = bounds.inset(by: padding)
+class FilterDataCell: UITableViewCell {
+    @IBOutlet weak var filterTypeButton: UIButton!
+    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var filterSwitcher: UISwitch!
+
+    var filterData: DataSortFilterModel?
+    weak var delegate: FilterDataCellDelegate?
+
+    var isFilterEnabled: Bool {
+        return filterSwitcher.isOn
+    }
+
+    deinit {
+        delegate = nil
+        filterSwitcher.removeTarget(self,
+                                    action: #selector(switchChanged),
+                                    for: UIControl.Event.valueChanged)
     }
 
     required init?(coder: NSCoder) {
@@ -25,25 +38,52 @@ class FilterDataCell: UITableViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-     
+        delegate = nil
     }
 
     override func awakeFromNib() {
         super.awakeFromNib()
-//        filterTypeButton.backgroundColor = UIColor.lightGray
-        contentView.roundCorners(radius: 10)
-        contentView.layer.borderWidth = 1
-        contentView.layer.borderColor = UIColor(red: 89 / 255, green: 127 / 255, blue: 166 / 255, alpha: 1).cgColor
+        filterTypeButton.roundCorners(radius: 5)
+
         if #available(iOS 13.0, *) {
             textField.overrideUserInterfaceStyle = .light
         }
         textField.delegate = self
+        filterSwitcher.removeTarget(self,
+                                    action: #selector(switchChanged),
+                                    for: UIControl.Event.valueChanged)
+    }
+
+    func updateCellData(filterData: DataSortFilterModel) {
+        filterSwitcher.addTarget(self, action: #selector(switchChanged), for: UIControl.Event.valueChanged)
+
+        filterTypeButton.setTitle(filterData.type.toString(), for: .normal)
+        textField.text = filterData.filterText
+        filterSwitcher.isOn = filterData.isEnabled
+        self.filterData = filterData
+    }
+
+    @objc func switchChanged(sender: UISwitch) {
+        filterData?.isEnabled = sender.isOn
+        notifyViewController()
+    }
+
+    func notifyViewController() {
+        if let filterData = filterData {
+            delegate?.cellDidUpdated(filterData: filterData)
+        }
     }
 }
 
-extension FilterDataCell: UITextFieldDelegate{
+extension FilterDataCell: UITextFieldDelegate {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        return true;
+        return true
     }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        filterData?.filterText = textField.text
+        notifyViewController()
+    }
+    
 }

@@ -11,9 +11,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="FilterViewController" customModule="LoggerInfo" customModuleProvider="target">
             <connections>
-                <outlet property="addFilterItemButton" destination="HN0-a7-foc" id="Vja-Me-6cB"/>
                 <outlet property="saveFilterDataButton" destination="TGC-LE-HTO" id="yCi-Da-Ztb"/>
                 <outlet property="tableView" destination="Zzu-pM-p5K" id="tKj-5z-ZDJ"/>
+                <outlet property="toggleEditModeButton" destination="vJg-zN-kvN" id="ZCP-00-nik"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -22,9 +22,9 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" allowsSelection="NO" rowHeight="65" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Zzu-pM-p5K">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" allowsSelection="NO" rowHeight="80" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Zzu-pM-p5K">
                     <rect key="frame" x="20" y="64" width="374" height="612"/>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="N1k-ep-JSC"/>
@@ -32,33 +32,24 @@
                     </connections>
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGC-LE-HTO" customClass="FilterButton" customModule="LoggerInfo" customModuleProvider="target">
-                    <rect key="frame" x="254" y="696" width="140" height="40"/>
+                    <rect key="frame" x="20" y="696" width="374" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="H2s-ee-SQA"/>
-                        <constraint firstAttribute="width" constant="140" id="c0L-QW-aZJ"/>
                     </constraints>
                     <state key="normal" title="Save"/>
                     <connections>
                         <action selector="saveFilterData:" destination="-1" eventType="touchUpInside" id="8iG-zK-fpl"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HN0-a7-foc" customClass="FilterButton" customModule="LoggerInfo" customModuleProvider="target">
-                    <rect key="frame" x="20" y="696" width="140" height="40"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="140" id="L6i-4E-2Le"/>
-                        <constraint firstAttribute="height" constant="40" id="O5o-LW-84L"/>
-                    </constraints>
-                    <state key="normal" title="Add"/>
-                    <connections>
-                        <action selector="addFilterItem:" destination="-1" eventType="touchUpInside" id="TwQ-lO-T4p"/>
-                    </connections>
-                </button>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R1F-3j-RRT">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                     <items>
-                        <barButtonItem title="Add filter item" id="iB9-s4-XTb" userLabel="Add Item"/>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="6D9-Bn-qoW"/>
-                        <barButtonItem title="Reorder Items" id="vJg-zN-kvN" userLabel="Reorder"/>
+                        <barButtonItem title="Reorder Mode" id="vJg-zN-kvN" userLabel="Reorder Mode">
+                            <connections>
+                                <action selector="toggleEditMode:" destination="-1" id="KjC-Tp-Ags"/>
+                            </connections>
+                        </barButtonItem>
                     </items>
                 </toolbar>
             </subviews>
@@ -67,14 +58,13 @@
             <constraints>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="TGC-LE-HTO" secondAttribute="trailing" constant="20" id="2dN-Uk-6EJ"/>
                 <constraint firstItem="Zzu-pM-p5K" firstAttribute="top" secondItem="R1F-3j-RRT" secondAttribute="bottom" constant="20" id="4LF-sO-GBo"/>
+                <constraint firstItem="TGC-LE-HTO" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="CPJ-JG-95i"/>
                 <constraint firstItem="Zzu-pM-p5K" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="D3V-mq-Sla"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="R1F-3j-RRT" secondAttribute="trailing" id="Pk0-VI-K2u"/>
-                <constraint firstItem="HN0-a7-foc" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="e1D-vl-GL9"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Zzu-pM-p5K" secondAttribute="trailing" constant="20" id="fqN-rS-znU"/>
                 <constraint firstItem="TGC-LE-HTO" firstAttribute="top" secondItem="Zzu-pM-p5K" secondAttribute="bottom" constant="20" id="lhy-Xn-2Oi"/>
                 <constraint firstItem="TGC-LE-HTO" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="qYx-xl-mwu"/>
                 <constraint firstItem="R1F-3j-RRT" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="r30-AT-glC"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="HN0-a7-foc" secondAttribute="bottom" id="txP-Ki-5pp"/>
                 <constraint firstItem="R1F-3j-RRT" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="v5h-yQ-4Dj"/>
             </constraints>
             <point key="canvasLocation" x="137.68115942028987" y="153.34821428571428"/>

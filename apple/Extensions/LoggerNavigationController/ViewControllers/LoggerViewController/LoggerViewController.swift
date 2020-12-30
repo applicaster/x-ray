@@ -18,11 +18,20 @@ class LoggerViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var sortLogsView: SortLogsView!
+    @IBOutlet weak var resetFilterBarButtonItem: UIBarButtonItem!
 
     private(set) weak var inMemorySink: InMemory?
 
+    // Original data source returned from sink
     var originalDataSource: [Event] = []
+
+    // Filtered models by filter DataSortFilterModel
     var filteredDataSource: [Event] = []
+
+    // Filtered models by filter DataSortFilterModel and log type buttons
+    var filteredDataSourceByType: [Event] = []
+
+    var filterModels: [DataSortFilterModel] = DataSortFilterHelper.dataFromUserDefaults()
 
     var formatter: EventFormatterProtocol?
     var sortParams = SortLogsHelper.dataFromUserDefaults()
@@ -36,7 +45,6 @@ class LoggerViewController: UIViewController {
 
     let dateFormatter = DateFormatter()
     public var format = "yyyy-MM-dd HH:mm:ssZ"
-    var subSystemFilter: String?
 
     deinit {
         inMemorySink = nil
@@ -65,8 +73,8 @@ class LoggerViewController: UIViewController {
         self.inMemorySink = inMemorySink
         if let events = inMemorySink?.events {
             originalDataSource = events
-            filteredDataSource = filterDataSource()
-            // invalidate layout during presentation anumation
+            filterDataSource()
+            // invalidate layout during presentation animation
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 self.collectionView.collectionViewLayout.invalidateLayout()
             }
@@ -106,24 +114,42 @@ class LoggerViewController: UIViewController {
     @IBAction func presentFilterViewController(_ sender: UIBarButtonItem) {
         let filterViewController = FilterViewController(nibName: "FilterViewController",
                                                         bundle: Bundle(for: type(of: self)))
-        navigationController?.present(filterViewController, animated: true, completion: nil)
+        filterViewController.filterModels = filterModels
+        filterViewController.delegate = self
+        navigationController?.present(filterViewController,
+                                      animated: true,
+                                      completion: nil)
     }
 
-    func reloadCollectionViewWithFilters() {
-        let newFilteredDataSource = filterDataSource()
-        if filteredDataSource != newFilteredDataSource {
-            filteredDataSource = newFilteredDataSource
-            collectionView.reloadData()
+    @IBAction func resetFilter(_ sender: UIBarButtonItem) {
+        applyNewFilters(newData: [])
+    }
 
-            collectionView.performBatchUpdates(nil) { [weak self] _ in
-                guard let self = self else { return }
+    func applyNewFilters(newData: [DataSortFilterModel]) {
+        if filterModels != newData {
+            filterModels = newData
+            DataSortFilterHelper.saveDataToUserDefaults(dataToSave: filterModels)
+            filterDataSource()
+            collectionView.reloadData()
+            DispatchQueue.main.asyncAfter(deadline: .now()) {
                 self.collectionView.collectionViewLayout.invalidateLayout()
-                if self.filteredDataSource.count > 0 {
-                    self.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0),
-                                                     at: .centeredVertically,
-                                                     animated: false)
-                }
             }
+        }
+    }
+
+    func filterDataSource() {
+        resetFilterBarButtonItem.isEnabled = filterModels.count > 0
+        filteredDataSource = DataSortFilterHelper.filterDataSource(filterData: filterModels,
+                                                                   allEvents: originalDataSource)
+        filteredDataSourceByType = filterDataSourceByType()
+    }
+
+    func filterDataSourceByType() -> [Event] {
+        return filteredDataSource.filter { (event) -> Bool in
+            if let selected = sortParams[event.level.rawValue] {
+                return selected
+            }
+            return false
         }
     }
 }
@@ -133,7 +159,7 @@ extension LoggerViewController: UICollectionViewDelegate {
         let bundle = Bundle(for: type(of: self))
         let detailedViewController = DetailedLoggerViewController(nibName: "DetailedLoggerViewController",
                                                                   bundle: bundle)
-        let event = filteredDataSource[indexPath.row]
+        let event = filteredDataSourceByType[indexPath.row]
         detailedViewController.event = event
         detailedViewController.dateString = dateStringFromEvent(event: event)
         navigationController?.pushViewController(detailedViewController,
@@ -144,13 +170,13 @@ extension LoggerViewController: UICollectionViewDelegate {
 extension LoggerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        return filteredDataSource.count
+        return filteredDataSourceByType.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier,
                                                       for: indexPath) as! LoggerCell
-        let event = filteredDataSource[indexPath.row]
+        let event = filteredDataSourceByType[indexPath.row]
         let formattedDate = dateStringFromEvent(event: event)
         cell.updateCell(event: event,
                         dateString: formattedDate)
@@ -166,47 +192,32 @@ extension LoggerViewController: SortLogsViewDelegate {
         reloadCollectionViewWithFilters()
     }
 
+    func reloadCollectionViewWithFilters() {
+        let newFilteredDataSource = filterDataSourceByType()
+        if filteredDataSourceByType != newFilteredDataSource {
+            filteredDataSourceByType = newFilteredDataSource
+            collectionView.reloadData()
+
+            collectionView.performBatchUpdates(nil) { [weak self] _ in
+                guard let self = self else { return }
+                self.collectionView.collectionViewLayout.invalidateLayout()
+                if self.filteredDataSourceByType.count > 0 {
+                    self.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0),
+                                                     at: .centeredVertically,
+                                                     animated: false)
+                }
+            }
+        }
+    }
+
     func initilizeSortData() {
         sortLogsView.delegate = self
         sortLogsView.initializeButtons(defaultStates: sortParams)
     }
-
-    func filterDataSource() -> [Event] {
-        return originalDataSource.filter { (event) -> Bool in
-            if let selected = sortParams[event.level.rawValue] {
-                if let subSystemFilter = subSystemFilter {
-                    return event.subsystem.lowercased().contains(subSystemFilter) && selected == true
-                } else {
-                    return selected
-                }
-            }
-            return false
-        }
-    }
 }
 
-extension LoggerViewController: UISearchBarDelegate {
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        if let text = searchBar.text,
-           text.count > 0 {
-            searchBar.text = searchBar.text?.lowercased().trimmingCharacters(in: .whitespaces)
-            subSystemFilter = searchBar.text?.lowercased()
-            // TODO: maybe not check when less than 3 char
-        } else {
-            subSystemFilter = nil
-        }
-        reloadCollectionViewWithFilters()
-    }
-
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
-
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            DispatchQueue.main.async {
-                searchBar.resignFirstResponder()
-            }
-        }
+extension LoggerViewController: FilterViewControllerDelegate {
+    func userDidSaveNewFilterData(filterModels: [DataSortFilterModel]) {
+        applyNewFilters(newData: filterModels)
     }
 }
