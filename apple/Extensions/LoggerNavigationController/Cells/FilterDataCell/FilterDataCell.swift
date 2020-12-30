@@ -14,7 +14,7 @@ protocol FilterDataCellDelegate: class {
 }
 
 class FilterDataCell: UITableViewCell {
-    @IBOutlet weak var filterTypeButton: UIButton!
+    @IBOutlet weak var filterTypeLabel: UILabel!
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var filterSwitcher: UISwitch!
 
@@ -43,7 +43,7 @@ class FilterDataCell: UITableViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        filterTypeButton.roundCorners(radius: 5)
+        filterTypeLabel.roundCorners(radius: 5)
 
         if #available(iOS 13.0, *) {
             textField.overrideUserInterfaceStyle = .light
@@ -55,16 +55,26 @@ class FilterDataCell: UITableViewCell {
     }
 
     func updateCellData(filterData: DataSortFilterModel) {
-        filterSwitcher.addTarget(self, action: #selector(switchChanged), for: UIControl.Event.valueChanged)
-
-        filterTypeButton.setTitle(filterData.type.toString(), for: .normal)
-        textField.text = filterData.filterText
-        filterSwitcher.isOn = filterData.isEnabled
         self.filterData = filterData
+        filterSwitcher.addTarget(self, action: #selector(switchChanged), for: UIControl.Event.valueChanged)
+        filterTypeLabel.text = filterData.type.toString()
+        filterSwitcher.isOn = filterData.isEnabled
+        updateUI()
+    }
+
+    func updateUI() {
+        let labelEnabledColor = UIColor(red: 90 / 255, green: 125 / 255, blue: 166 / 255, alpha: 1)
+        let labelDisabledColor = UIColor(red: 121 / 255, green: 140 / 255, blue: 151 / 255, alpha: 1)
+
+        filterTypeLabel.backgroundColor = filterData?.isEnabled ?? false ?
+            labelEnabledColor : labelDisabledColor
+        textField.text = filterData?.filterText
+        textField.isEnabled = filterData?.isEnabled ?? false
     }
 
     @objc func switchChanged(sender: UISwitch) {
         filterData?.isEnabled = sender.isOn
+        updateUI()
         notifyViewController()
     }
 
@@ -85,5 +95,4 @@ extension FilterDataCell: UITextFieldDelegate {
         filterData?.filterText = textField.text
         notifyViewController()
     }
-    
 }
