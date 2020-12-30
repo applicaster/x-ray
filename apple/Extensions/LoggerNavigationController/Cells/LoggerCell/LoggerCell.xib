@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,64 +21,67 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="120"/>
                         <subviews>
                             <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZUI-q4-eZc">
-                                <rect key="frame" x="0.0" y="0.0" width="15" height="120"/>
-                                <color key="backgroundColor" systemColor="systemPurpleColor" red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="0.0" y="0.0" width="12" height="120"/>
+                                <color key="backgroundColor" systemColor="systemPurpleColor"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="15" id="pvY-rj-xzW"/>
+                                    <constraint firstAttribute="width" constant="12" id="pvY-rj-xzW"/>
                                 </constraints>
                             </view>
                             <view clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AiD-Pa-otB">
-                                <rect key="frame" x="15" y="0.0" width="399" height="120"/>
+                                <rect key="frame" x="12" y="0.0" width="402" height="120"/>
                                 <subviews>
-                                    <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" text="Message Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HIf-49-fuO">
-                                        <rect key="frame" x="10" y="10" width="379" height="42"/>
+                                    <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" text="Message Label" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HIf-49-fuO">
+                                        <rect key="frame" x="10" y="10" width="382" height="45"/>
                                         <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
                                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" verticalCompressionResistancePriority="1000" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" text="Subsystem" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ejS-C7-ZvE">
-                                        <rect key="frame" x="10" y="57" width="379" height="18"/>
+                                    <label userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="1000" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" text="Subsystem" lineBreakMode="headTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ejS-C7-ZvE">
+                                        <rect key="frame" x="10" y="65" width="382" height="15"/>
                                         <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="15" id="AmE-ye-wdb"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="13"/>
+                                        <color key="textColor" systemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="crZ-q0-hcc">
-                                        <rect key="frame" x="10" y="80" width="379" height="35"/>
+                                        <rect key="frame" x="10" y="90" width="382" height="25"/>
                                         <subviews>
                                             <label userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" text="Date Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sDA-XI-jah">
-                                                <rect key="frame" x="35" y="5" width="271" height="25"/>
+                                                <rect key="frame" x="21" y="5" width="297" height="15"/>
                                                 <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="14"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" text="Log Type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hkl-8S-wwf">
-                                                <rect key="frame" x="316" y="5" width="63" height="25"/>
-                                                <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="14"/>
-                                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" type="system" weight="thin" pointSize="13"/>
+                                                <color key="textColor" systemColor="darkTextColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" image="clock.png" translatesAutoresizingMaskIntoConstraints="NO" id="DgH-a0-OXB">
-                                                <rect key="frame" x="0.0" y="5" width="25" height="25"/>
+                                                <rect key="frame" x="0.0" y="5" width="16" height="15"/>
                                                 <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="width" constant="25" id="Dj7-be-VCz"/>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="750" constant="25" id="kRm-ge-bdn"/>
+                                                    <constraint firstAttribute="width" constant="16" id="Dj7-be-VCz"/>
+                                                    <constraint firstAttribute="height" priority="750" constant="25" id="kRm-ge-bdn"/>
                                                 </constraints>
                                             </imageView>
+                                            <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" text="Log Type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hkl-8S-wwf">
+                                                <rect key="frame" x="323" y="5" width="59" height="15"/>
+                                                <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                                                <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="Hkl-8S-wwf" secondAttribute="trailing" id="0d2-Vy-pg8"/>
-                                            <constraint firstAttribute="height" relation="lessThanOrEqual" priority="750" constant="35" id="6dn-W3-Gfw"/>
                                             <constraint firstItem="DgH-a0-OXB" firstAttribute="top" secondItem="crZ-q0-hcc" secondAttribute="top" constant="5" id="DJ6-sC-DDZ"/>
                                             <constraint firstItem="sDA-XI-jah" firstAttribute="top" secondItem="crZ-q0-hcc" secondAttribute="top" constant="5" id="KwS-Vp-utm"/>
-                                            <constraint firstItem="sDA-XI-jah" firstAttribute="leading" secondItem="DgH-a0-OXB" secondAttribute="trailing" constant="10" id="MYE-jc-pkq"/>
+                                            <constraint firstItem="sDA-XI-jah" firstAttribute="leading" secondItem="DgH-a0-OXB" secondAttribute="trailing" constant="5" id="MYE-jc-pkq"/>
                                             <constraint firstItem="Hkl-8S-wwf" firstAttribute="top" secondItem="crZ-q0-hcc" secondAttribute="top" constant="5" id="Pbd-Y3-U54"/>
-                                            <constraint firstItem="Hkl-8S-wwf" firstAttribute="leading" secondItem="sDA-XI-jah" secondAttribute="trailing" constant="10" id="eby-LM-lPt"/>
+                                            <constraint firstAttribute="height" constant="25" id="YQE-Pk-Y6u"/>
+                                            <constraint firstItem="Hkl-8S-wwf" firstAttribute="leading" secondItem="sDA-XI-jah" secondAttribute="trailing" constant="5" id="eby-LM-lPt"/>
                                             <constraint firstAttribute="bottom" secondItem="Hkl-8S-wwf" secondAttribute="bottom" constant="5" id="nTJ-mK-dlf"/>
                                             <constraint firstAttribute="bottom" secondItem="DgH-a0-OXB" secondAttribute="bottom" constant="5" id="pOz-C0-Yii"/>
                                             <constraint firstAttribute="bottom" secondItem="sDA-XI-jah" secondAttribute="bottom" constant="5" id="x5r-dX-PUS"/>
@@ -87,10 +91,10 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="ejS-C7-ZvE" firstAttribute="top" secondItem="HIf-49-fuO" secondAttribute="bottom" constant="5" id="2m8-jf-x86"/>
+                                    <constraint firstItem="ejS-C7-ZvE" firstAttribute="top" secondItem="HIf-49-fuO" secondAttribute="bottom" constant="10" id="2m8-jf-x86"/>
                                     <constraint firstAttribute="trailing" secondItem="crZ-q0-hcc" secondAttribute="trailing" constant="10" id="7Z7-zi-CVW"/>
                                     <constraint firstItem="crZ-q0-hcc" firstAttribute="leading" secondItem="AiD-Pa-otB" secondAttribute="leading" constant="10" id="Fr8-iN-lUJ"/>
-                                    <constraint firstItem="crZ-q0-hcc" firstAttribute="top" secondItem="ejS-C7-ZvE" secondAttribute="bottom" constant="5" id="Gip-OU-deO"/>
+                                    <constraint firstItem="crZ-q0-hcc" firstAttribute="top" secondItem="ejS-C7-ZvE" secondAttribute="bottom" constant="10" id="Gip-OU-deO"/>
                                     <constraint firstItem="HIf-49-fuO" firstAttribute="leading" secondItem="AiD-Pa-otB" secondAttribute="leading" constant="10" id="Qfa-H3-cC9"/>
                                     <constraint firstAttribute="trailing" secondItem="HIf-49-fuO" secondAttribute="trailing" constant="10" id="Yrh-qx-ey7"/>
                                     <constraint firstItem="HIf-49-fuO" firstAttribute="top" secondItem="AiD-Pa-otB" secondAttribute="top" constant="10" id="dzD-yO-Cw4"/>
@@ -133,5 +137,14 @@
     </objects>
     <resources>
         <image name="clock.png" width="50" height="50"/>
+        <systemColor name="darkTextColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="darkTextColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemPurpleColor">
+            <color red="0.68627450980392157" green="0.32156862745098042" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

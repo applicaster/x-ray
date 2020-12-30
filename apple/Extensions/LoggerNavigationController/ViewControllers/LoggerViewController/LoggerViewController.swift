@@ -103,6 +103,12 @@ class LoggerViewController: UIViewController {
         Reporter.requestSendEmail()
     }
 
+    @IBAction func presentFilterViewController(_ sender: UIBarButtonItem) {
+        let filterViewController = FilterViewController(nibName: "FilterViewController",
+                                                        bundle: Bundle(for: type(of: self)))
+        navigationController?.present(filterViewController, animated: true, completion: nil)
+    }
+
     func reloadCollectionViewWithFilters() {
         let newFilteredDataSource = filterDataSource()
         if filteredDataSource != newFilteredDataSource {
@@ -182,7 +188,7 @@ extension LoggerViewController: SortLogsViewDelegate {
 extension LoggerViewController: UISearchBarDelegate {
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         if let text = searchBar.text,
-            text.count > 0 {
+           text.count > 0 {
             searchBar.text = searchBar.text?.lowercased().trimmingCharacters(in: .whitespaces)
             subSystemFilter = searchBar.text?.lowercased()
             // TODO: maybe not check when less than 3 char

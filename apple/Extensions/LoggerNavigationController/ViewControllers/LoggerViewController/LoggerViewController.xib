@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -11,7 +11,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoggerViewController" customModule="LoggerInfo" customModuleProvider="target">
             <connections>
                 <outlet property="collectionView" destination="DYV-C0-pBf" id="2an-5k-G0k"/>
-                <outlet property="searchBar" destination="pm1-uJ-Z51" id="kj5-z1-Spk"/>
                 <outlet property="sortLogsView" destination="20q-sV-6nt" id="YMg-0V-5nz"/>
                 <outlet property="view" destination="iN0-l3-epB" id="TCL-WJ-zdx"/>
             </connections>
@@ -71,6 +70,7 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </stackView>
                     </subviews>
+                    <viewLayoutGuide key="safeArea" id="O5o-ah-2FK"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="v3P-Oa-wsG" firstAttribute="bottom" secondItem="O5o-ah-2FK" secondAttribute="bottom" id="26t-Nn-XN5"/>
@@ -79,7 +79,6 @@
                         <constraint firstItem="v3P-Oa-wsG" firstAttribute="leading" secondItem="O5o-ah-2FK" secondAttribute="leading" id="YG0-FF-Wao"/>
                         <constraint firstItem="v3P-Oa-wsG" firstAttribute="top" secondItem="O5o-ah-2FK" secondAttribute="top" id="du2-Uh-o3a"/>
                     </constraints>
-                    <viewLayoutGuide key="safeArea" id="O5o-ah-2FK"/>
                     <connections>
                         <outlet property="debugButton" destination="Oyh-9M-74Q" id="KxN-ys-ZMW"/>
                         <outlet property="errorButton" destination="j3M-rV-RU0" id="Web-f4-fPV"/>
@@ -108,25 +107,22 @@
                         <constraint firstAttribute="height" constant="44" id="oWN-6e-f5c"/>
                     </constraints>
                     <items>
-                        <barButtonItem title="Export" id="Rrt-Ih-dTJ">
+                        <barButtonItem title="Export" id="3u2-EG-b3L">
                             <connections>
-                                <action selector="exportData:" destination="-1" id="QRL-3Z-Y9P"/>
+                                <action selector="exportData:" destination="-1" id="xF4-hx-r10"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="ClU-Pr-XKM"/>
-                        <barButtonItem style="plain" id="rD4-zH-hPk">
-                            <searchBar key="customView" contentMode="redraw" placeholder="Enter subsystem" id="pm1-uJ-Z51">
-                                <rect key="frame" x="99" y="0.0" width="260" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
-                                <connections>
-                                    <outlet property="delegate" destination="-1" id="wim-U3-odK"/>
-                                </connections>
-                            </searchBar>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="zZ7-kg-iMw"/>
+                        <barButtonItem title="Filter" id="Rrt-Ih-dTJ" userLabel="Filter">
+                            <connections>
+                                <action selector="presentFilterViewController:" destination="-1" id="HBU-eT-bIN"/>
+                            </connections>
                         </barButtonItem>
+                        <barButtonItem enabled="NO" title="Reset" id="pd4-ED-5G0" userLabel="ResetFilter"/>
                     </items>
                 </toolbar>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <color key="backgroundColor" red="0.20000000000000001" green="0.70980392156862748" blue="0.9137254901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="DYV-C0-pBf" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="24D-kw-DFl"/>
@@ -140,7 +136,6 @@
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="DYV-C0-pBf" secondAttribute="bottom" id="xcg-6g-qae"/>
                 <constraint firstItem="DYV-C0-pBf" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" constant="-10" id="xtL-HZ-P3B"/>
             </constraints>
-            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <point key="canvasLocation" x="138.40000000000001" y="152.47376311844079"/>
         </view>
     </objects>

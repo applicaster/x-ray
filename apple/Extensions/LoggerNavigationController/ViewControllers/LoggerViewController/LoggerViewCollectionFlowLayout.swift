@@ -51,3 +51,4 @@ final class LoggerViewCollectionFlowLayout: UICollectionViewFlowLayout {
         return layoutAttributes
     }
 }
+

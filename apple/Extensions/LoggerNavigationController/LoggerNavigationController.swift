@@ -25,6 +25,11 @@ public class LoggerNavigationController: UINavigationController {
         let bundle = Bundle(for: Self.self)
         let loggerViewController = LoggerViewController(nibName: "LoggerViewController",
                                                         bundle: bundle)
+        
+        NSSetUncaughtExceptionHandler { (exception) in
+           let stack = exception.callStackReturnAddresses
+           print("Stack trace: \(stack)")
+            }
         return loggerViewController
     }
 }
