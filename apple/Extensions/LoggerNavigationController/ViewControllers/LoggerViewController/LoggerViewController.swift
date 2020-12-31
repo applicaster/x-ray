@@ -102,6 +102,11 @@ class LoggerViewController: UIViewController {
     @IBAction func exportData(_ sender: UIBarButtonItem) {
         Reporter.requestSendEmail()
     }
+    
+    @IBAction func close(_ sender: UIBarButtonItem) {
+        let presenter = UIApplication.shared.keyWindow?.rootViewController
+        presenter?.presentedViewController?.dismiss(animated: true, completion: nil)
+    }
 
     func reloadCollectionViewWithFilters() {
         let newFilteredDataSource = filterDataSource()
