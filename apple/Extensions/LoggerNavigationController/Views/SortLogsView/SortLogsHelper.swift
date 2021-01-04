@@ -22,9 +22,9 @@ struct SortLogsHelper {
             return result
         } else {
             let newData: [Int: Bool] = [
-                LogLevel.verbose.rawValue: true,
-                LogLevel.debug.rawValue: true,
-                LogLevel.info.rawValue: true,
+                LogLevel.verbose.rawValue: false,
+                LogLevel.debug.rawValue: false,
+                LogLevel.info.rawValue: false,
                 LogLevel.warning.rawValue: true,
                 LogLevel.error.rawValue: true,
             ]

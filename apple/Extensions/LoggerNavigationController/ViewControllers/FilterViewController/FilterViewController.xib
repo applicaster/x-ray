@@ -13,7 +13,6 @@
             <connections>
                 <outlet property="saveFilterDataButton" destination="TGC-LE-HTO" id="yCi-Da-Ztb"/>
                 <outlet property="tableView" destination="Zzu-pM-p5K" id="tKj-5z-ZDJ"/>
-                <outlet property="toggleEditModeButton" destination="vJg-zN-kvN" id="ZCP-00-nik"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -23,7 +22,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" allowsSelection="NO" rowHeight="80" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Zzu-pM-p5K">
-                    <rect key="frame" x="20" y="64" width="374" height="612"/>
+                    <rect key="frame" x="20" y="20" width="374" height="636"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <connections>
@@ -32,7 +31,7 @@
                     </connections>
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TGC-LE-HTO" customClass="FilterButton" customModule="LoggerInfo" customModuleProvider="target">
-                    <rect key="frame" x="20" y="696" width="374" height="40"/>
+                    <rect key="frame" x="20" y="676" width="374" height="40"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="H2s-ee-SQA"/>
                     </constraints>
@@ -41,33 +40,19 @@
                         <action selector="saveFilterData:" destination="-1" eventType="touchUpInside" id="8iG-zK-fpl"/>
                     </connections>
                 </button>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R1F-3j-RRT">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                    <items>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="6D9-Bn-qoW"/>
-                        <barButtonItem title="Reorder Mode" id="vJg-zN-kvN" userLabel="Reorder Mode">
-                            <connections>
-                                <action selector="toggleEditMode:" destination="-1" id="KjC-Tp-Ags"/>
-                            </connections>
-                        </barButtonItem>
-                    </items>
-                </toolbar>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemTealColor"/>
             <constraints>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="TGC-LE-HTO" secondAttribute="trailing" constant="20" id="2dN-Uk-6EJ"/>
-                <constraint firstItem="Zzu-pM-p5K" firstAttribute="top" secondItem="R1F-3j-RRT" secondAttribute="bottom" constant="20" id="4LF-sO-GBo"/>
                 <constraint firstItem="TGC-LE-HTO" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="CPJ-JG-95i"/>
                 <constraint firstItem="Zzu-pM-p5K" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="20" id="D3V-mq-Sla"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="R1F-3j-RRT" secondAttribute="trailing" id="Pk0-VI-K2u"/>
+                <constraint firstItem="Zzu-pM-p5K" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="20" id="SOs-HA-Cae"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Zzu-pM-p5K" secondAttribute="trailing" constant="20" id="fqN-rS-znU"/>
                 <constraint firstItem="TGC-LE-HTO" firstAttribute="top" secondItem="Zzu-pM-p5K" secondAttribute="bottom" constant="20" id="lhy-Xn-2Oi"/>
-                <constraint firstItem="TGC-LE-HTO" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="qYx-xl-mwu"/>
-                <constraint firstItem="R1F-3j-RRT" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="r30-AT-glC"/>
-                <constraint firstItem="R1F-3j-RRT" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="v5h-yQ-4Dj"/>
+                <constraint firstItem="TGC-LE-HTO" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" constant="-20" id="qYx-xl-mwu"/>
             </constraints>
-            <point key="canvasLocation" x="137.68115942028987" y="153.34821428571428"/>
+            <point key="canvasLocation" x="137.68115942028987" y="153.2608695652174"/>
         </view>
     </objects>
     <resources>

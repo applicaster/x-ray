@@ -75,16 +75,7 @@ class FilterViewController: UIViewController {
     @IBAction func saveFilterData(_ sender: UIButton) {
         tableView.endEditing(true)
         delegate?.userDidSaveNewFilterData(filterModels: filterModels)
-        dismiss(animated: true, completion: nil)
-    }
-
-    @IBAction func toggleEditMode(_ sender: UIBarButtonItem) {
-        tableView.setEditing(!tableView.isEditing, animated: true)
-        if tableView.isEditing == true {
-            toggleEditModeButton.title = "Finish reorder Mode"
-        } else {
-            toggleEditModeButton.title = "Reorder mode"
-        }
+        navigationController?.popViewController(animated: true)
     }
 
     func createNewFilterModels() {
@@ -98,16 +89,6 @@ class FilterViewController: UIViewController {
             }
         }
         filterModels = newFilterModels
-    }
-}
-
-extension FilterViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .none
-    }
-
-    func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
-        return false
     }
 }
 
@@ -128,16 +109,16 @@ extension FilterViewController: UITableViewDataSource {
 
         return cell
     }
-
-    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let movedObject = filterModels[sourceIndexPath.row]
-        filterModels.remove(at: sourceIndexPath.row)
-        filterModels.insert(movedObject, at: destinationIndexPath.row)
-    }
 }
 
 extension FilterViewController: FilterDataCellDelegate {
     func cellDidUpdated(filterData: DataSortFilterModel) {
-        filterModels[filterData.type.rawValue] = filterData
+        var newFilterData = filterData
+        if let text = filterData.filterText {
+            let filterText = NSString(string: text)
+            newFilterData.filterText = filterText.trimmingCharacters(in: NSCharacterSet.whitespaces)
+        }
+
+        filterModels[filterData.type.rawValue] = newFilterData
     }
 }

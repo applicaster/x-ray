@@ -20,9 +20,9 @@ class DataSortFilterHelper {
         return filteredEvents
     }
 
-    static func applyFilter(for filterModel: DataSortFilterModel, events: [Event]) -> [Event] {
-        guard filterModel.isEnabled == true,
-              let filterText = filterModel.filterText,
+    static func applyFilter(for filterModel: DataSortFilterModel,
+                            events: [Event]) -> [Event] {
+        guard let filterText = filterModel.filterText,
               filterText.count > 0 else {
             return events
         }
@@ -46,7 +46,9 @@ class DataSortFilterHelper {
     static func filterAny(filterText: String,
                           events: [Event]) -> [Event] {
         return events.filter { (event) -> Bool in
-            event.subsystem.lowercased().contains(filterText) || event.category.lowercased().contains(filterText) || event.message.lowercased().contains(filterText)
+            event.subsystem.lowercased().contains(filterText) ||
+                event.category.lowercased().contains(filterText) ||
+                event.message.lowercased().contains(filterText)
         }
     }
 

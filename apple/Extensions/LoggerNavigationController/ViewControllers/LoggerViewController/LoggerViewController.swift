@@ -116,9 +116,8 @@ class LoggerViewController: UIViewController {
                                                         bundle: Bundle(for: type(of: self)))
         filterViewController.filterModels = filterModels
         filterViewController.delegate = self
-        navigationController?.present(filterViewController,
-                                      animated: true,
-                                      completion: nil)
+        navigationController?.pushViewController(filterViewController,
+                                                 animated: true)
     }
 
     @IBAction func resetFilter(_ sender: UIBarButtonItem) {
