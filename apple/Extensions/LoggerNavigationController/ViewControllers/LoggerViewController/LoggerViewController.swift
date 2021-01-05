@@ -57,7 +57,14 @@ class LoggerViewController: UIViewController {
         collectionViewSetup()
         prepareLogger()
     }
-
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.estimatedItemSize = CGSize(width: self.collectionView.frame.size.width, height: 128)
+        }
+    }
+    
     func xibSetup() {
         guard let view = loadViewFromNib() else { return }
         view.frame = self.view.bounds
@@ -74,19 +81,14 @@ class LoggerViewController: UIViewController {
         if let events = inMemorySink?.events {
             originalDataSource = events
             filterDataSource()
-            // invalidate layout during presentation animation
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                self.collectionView.collectionViewLayout.invalidateLayout()
-            }
+//            collectionView.reloadData()
         }
     }
 
     func collectionViewSetup() {
-        let collectionViewFlowLayout = LoggerViewCollectionFlowLayout()
-        collectionView?.collectionViewLayout = collectionViewFlowLayout
-        collectionView?.contentInsetAdjustmentBehavior = .always
-
         let bundle = Bundle(for: type(of: self))
+     
+
         collectionView?.register(UINib(nibName: cellIdentifier,
                                        bundle: bundle),
                                  forCellWithReuseIdentifier: cellIdentifier)
