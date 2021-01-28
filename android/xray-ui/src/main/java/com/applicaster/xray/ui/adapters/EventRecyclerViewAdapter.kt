@@ -19,7 +19,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.applicaster.xray.core.Event
 import com.applicaster.xray.ui.R
-import com.applicaster.xray.ui.fragments.EventLogFragment
+import com.applicaster.xray.ui.fragments.model.SearchState
 import com.applicaster.xray.ui.utility.format
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.xray_fragment_event_log_entry.view.*
@@ -29,7 +29,7 @@ import java.util.*
 class EventRecyclerViewAdapter(
     owner: LifecycleOwner,
     observableEventList: LiveData<List<Event>>,
-    private val searchState: EventLogFragment.SearchState
+    private val searchState: SearchState
 ) : RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder>(), Observer<List<Event>> {
 
     private var values: List<Event> = observableEventList.value!!

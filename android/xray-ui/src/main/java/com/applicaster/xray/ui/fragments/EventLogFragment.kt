@@ -10,15 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.applicaster.xray.core.Core
-import com.applicaster.xray.core.Event
 import com.applicaster.xray.core.LogLevel
 import com.applicaster.xray.ui.R
 import com.applicaster.xray.ui.adapters.EventRecyclerViewAdapter
+import com.applicaster.xray.ui.fragments.model.SearchState
 import com.applicaster.xray.ui.sinks.InMemoryLogSink
 import com.applicaster.xray.ui.utility.FilteredEventList
 
@@ -29,70 +26,6 @@ class EventLogFragment : Fragment() {
 
     private var inMemorySinkName: String? = null
     private var defaultLevel: Int = LogLevel.info.level
-
-    class SearchState(private var list: LiveData<List<Event>>,
-                      lifecycleOwner: LifecycleOwner) : Observer<List<Event>> {
-
-        init {
-            list.observe(lifecycleOwner, this)
-        }
-
-        fun update(text: String) {
-            this.text = text
-            search()
-        }
-
-        private var text = ""
-        private var result: List<Event> = emptyList()
-        private var current: Int = 0
-
-        fun isIn(event: Event): Boolean = result.contains(event)
-
-        fun isCurrent(event: Event): Boolean {
-            return result.isNotEmpty() && current < result.size && result[current] == event
-        }
-
-        fun getCurrentIndex(): Int? {
-            if(result.isEmpty())
-                return null
-            val c = result.getOrNull(current) ?: return null
-            return when(val idx = list.value!!.indexOf(c)) {
-                -1 -> null
-                else -> idx
-            }
-        }
-
-        fun next(): Boolean {
-            if(current + 1 < result.size ) {
-                ++current
-                return true
-            }
-            return false
-        }
-
-        fun prev(): Boolean {
-            if (current > 0) {
-                --current
-                return true
-            }
-            return false
-        }
-
-        override fun onChanged(t: List<Event>?) {
-            search()
-        }
-
-        private fun search() {
-            if(text.isEmpty()) {
-                result = emptyList()
-                current = 0
-                return
-            }
-            val c = result.getOrNull(current)
-            result = list.value!!.filter { it.message.contains(text, ignoreCase = true) }.toList()
-            current = result.indexOf(c).coerceAtLeast(0)
-        }
-    }
 
     private lateinit var searchState: SearchState
 
@@ -134,7 +67,10 @@ class EventLogFragment : Fragment() {
 
             // Wrap original list to filtered one
             val filteredList = FilteredEventList(viewLifecycleOwner, inMemoryLogSink.getLiveData())
-            searchState = SearchState(filteredList, viewLifecycleOwner)
+            searchState = SearchState(
+                filteredList,
+                viewLifecycleOwner
+            )
 
             // Setup log level filter spinner
             view.findViewById<Spinner>(R.id.cb_filter).apply {
