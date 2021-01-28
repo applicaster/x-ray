@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.applicaster.xray.core.Event
 
+// Don't want to make it observable yet
 class SearchState(private var list: LiveData<List<Event>>,
                   lifecycleOwner: LifecycleOwner
 ) : Observer<List<Event>> {

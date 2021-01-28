@@ -2,13 +2,12 @@ package com.applicaster.xray.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.applicaster.xray.core.Core
@@ -111,40 +110,14 @@ class EventLogFragment : Fragment() {
                 }
 
             val edSubsystem = filter.findViewById<EditText>(R.id.ed_subsystem)
-            edSubsystem.addTextChangedListener(object :
-                    TextWatcher {
-                override fun beforeTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                ) = Unit
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) =
-                        Unit
-
-                override fun afterTextChanged(s: Editable?) {
-                    filteredList.subsystem = s.toString()
-                }
-            })
+            edSubsystem.doAfterTextChanged {
+                filteredList.subsystem = it.toString()
+            }
 
             val edCategory = filter.findViewById<EditText>(R.id.ed_category)
-            edCategory.addTextChangedListener(object :
-                    TextWatcher {
-                override fun beforeTextChanged(
-                        s: CharSequence?,
-                        start: Int,
-                        count: Int,
-                        after: Int
-                ) = Unit
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) =
-                        Unit
-
-                override fun afterTextChanged(s: Editable?) {
-                    filteredList.category = s.toString()
-                }
-            })
+            edCategory.doAfterTextChanged {
+                filteredList.category = it.toString()
+            }
 
             // Search
 
@@ -154,26 +127,13 @@ class EventLogFragment : Fragment() {
                 search.visibility = if (isChecked) View.VISIBLE else View.GONE
             }
 
-            view.findViewById<EditText>(R.id.ed_text).addTextChangedListener(object :
-                TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) = Unit
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) =
-                    Unit
-
-                override fun afterTextChanged(s: Editable?) {
-                    searchState.update(s.toString())
-                    list.adapter?.notifyDataSetChanged()
-                    searchState.getCurrentIndex()?.let {
-                        list.scrollToPosition(it)
-                    }
+            view.findViewById<EditText>(R.id.ed_text).doAfterTextChanged {
+                searchState.update(it.toString())
+                list.adapter?.notifyDataSetChanged()
+                searchState.getCurrentIndex()?.let {
+                    list.scrollToPosition(it)
                 }
-            })
+            }
 
             view.findViewById<View>(R.id.btn_prev).setOnClickListener {
                 if (searchState.prev()) {
