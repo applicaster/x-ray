@@ -1,4 +1,4 @@
-package com.applicaster.xray.ui.utility
+package com.applicaster.xray.ui.fragments.model
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData

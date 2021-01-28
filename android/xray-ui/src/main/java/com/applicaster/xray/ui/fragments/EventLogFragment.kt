@@ -16,7 +16,7 @@ import com.applicaster.xray.ui.R
 import com.applicaster.xray.ui.adapters.EventRecyclerViewAdapter
 import com.applicaster.xray.ui.fragments.model.SearchState
 import com.applicaster.xray.ui.sinks.InMemoryLogSink
-import com.applicaster.xray.ui.utility.FilteredEventList
+import com.applicaster.xray.ui.fragments.model.FilteredEventList
 
 /**
  * A fragment representing a list of Items.
@@ -26,7 +26,7 @@ class EventLogFragment : Fragment() {
     private var inMemorySinkName: String? = null
     private var defaultLevel: Int = LogLevel.info.level
 
-    private lateinit var searchState: SearchState
+    private lateinit var searchState: SearchState // can be local, but member for debugging
 
     override fun onInflate(context: Context, attrs: AttributeSet, savedInstanceState: Bundle?) {
         super.onInflate(context, attrs, savedInstanceState)
@@ -66,10 +66,7 @@ class EventLogFragment : Fragment() {
 
             // Wrap original list to filtered one
             val filteredList = FilteredEventList(viewLifecycleOwner, inMemoryLogSink.getLiveData())
-            searchState = SearchState(
-                filteredList,
-                viewLifecycleOwner
-            )
+            searchState = SearchState(filteredList, viewLifecycleOwner)
 
             // Setup log level filter spinner
             view.findViewById<Spinner>(R.id.cb_filter).apply {
@@ -122,34 +119,29 @@ class EventLogFragment : Fragment() {
             // Search
 
             val search = view.findViewById<LinearLayout>(R.id.cnt_search)
-            val bntSearch = view.findViewById<ToggleButton>(R.id.tb_search)
-            bntSearch.setOnCheckedChangeListener { _, isChecked ->
+            view.findViewById<ToggleButton>(R.id.tb_search).setOnCheckedChangeListener { _, isChecked ->
                 search.visibility = if (isChecked) View.VISIBLE else View.GONE
             }
 
-            view.findViewById<EditText>(R.id.ed_text).doAfterTextChanged {
-                searchState.update(it.toString())
+            fun onSearchUpdated() {
                 list.adapter?.notifyDataSetChanged()
                 searchState.getCurrentIndex()?.let {
                     list.scrollToPosition(it)
                 }
             }
 
+            view.findViewById<EditText>(R.id.ed_text).doAfterTextChanged {
+                searchState.update(it.toString())
+                onSearchUpdated()
+            }
+
             view.findViewById<View>(R.id.btn_prev).setOnClickListener {
-                if (searchState.prev()) {
-                    list.adapter?.notifyDataSetChanged()
-                    searchState.getCurrentIndex()?.let {
-                        list.scrollToPosition(it)
-                    }
-                }
+                if (searchState.prev())
+                    onSearchUpdated()
             }
             view.findViewById<View>(R.id.btn_next).setOnClickListener {
-                if (searchState.next()) {
-                    list.adapter?.notifyDataSetChanged()
-                    searchState.getCurrentIndex()?.let {
-                        list.scrollToPosition(it)
-                    }
-                }
+                if (searchState.next())
+                    onSearchUpdated()
             }
         }
 
