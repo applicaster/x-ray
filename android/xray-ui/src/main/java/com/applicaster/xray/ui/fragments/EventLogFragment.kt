@@ -24,12 +24,18 @@ import com.applicaster.xray.ui.utility.FilteredEventList
 class EventLogFragment : Fragment() {
 
     private var inMemorySinkName: String? = null
+    private var defaultLevel: Int = LogLevel.info.level
 
     override fun onInflate(context: Context, attrs: AttributeSet, savedInstanceState: Bundle?) {
         super.onInflate(context, attrs, savedInstanceState)
         val ta = context.obtainStyledAttributes(attrs, R.styleable.EventLogFragment_MembersInjector)
         if (ta.hasValue(R.styleable.EventLogFragment_MembersInjector_sink_name)) {
             inMemorySinkName = ta.getString(R.styleable.EventLogFragment_MembersInjector_sink_name)
+        }
+        if(ta.hasValue(R.styleable.EventLogFragment_MembersInjector_default_level)){
+            ta.getString(R.styleable.EventLogFragment_MembersInjector_default_level)?.toIntOrNull()?.let {
+                defaultLevel = LogLevel.fromLevel(it).level
+            }
         }
         ta.recycle()
     }
@@ -66,7 +72,7 @@ class EventLogFragment : Fragment() {
                         android.R.layout.simple_list_item_1,
                         LogLevel.values()
                 )
-                setSelection(LogLevel.info.level)
+                setSelection(defaultLevel)
                 onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onNothingSelected(parent: AdapterView<*>?) {
                     }
