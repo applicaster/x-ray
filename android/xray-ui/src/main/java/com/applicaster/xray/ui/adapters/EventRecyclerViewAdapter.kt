@@ -19,6 +19,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.applicaster.xray.core.Event
 import com.applicaster.xray.ui.R
+import com.applicaster.xray.ui.fragments.EventLogFragment
 import com.applicaster.xray.ui.utility.format
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.xray_fragment_event_log_entry.view.*
@@ -27,7 +28,8 @@ import java.util.*
 
 class EventRecyclerViewAdapter(
     owner: LifecycleOwner,
-    observableEventList: LiveData<List<Event>>
+    observableEventList: LiveData<List<Event>>,
+    private val searchState: EventLogFragment.SearchState
 ) : RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder>(), Observer<List<Event>> {
 
     private var values: List<Event> = observableEventList.value!!
@@ -70,6 +72,9 @@ class EventRecyclerViewAdapter(
         // should be static, but its internal class
         private val colors = view.resources.getIntArray(R.array.log_levels)
         private val detailsHint = view.context.getString(R.string.xray_lbl_tap_for_details)
+        private val searchColorCurrent = view.resources.getColor(android.R.color.holo_blue_bright)
+        private val searchColorIsIn = view.resources.getColor(android.R.color.holo_blue_dark)
+        private val searchColorDefault = view.resources.getColor(android.R.color.transparent)
 
         init {
             // on long click copy to clipboard
@@ -115,6 +120,13 @@ class EventRecyclerViewAdapter(
             } else {
                 details.visibility = View.GONE
             }
+            view.setBackgroundColor(
+                when {
+                    searchState.isCurrent(item) -> searchColorCurrent
+                    searchState.isIn(item) -> searchColorIsIn
+                    else -> searchColorDefault
+                }
+            )
         }
 
         private fun hasDetails(item: Event) =

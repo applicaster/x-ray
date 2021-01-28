@@ -25,6 +25,15 @@
             android:textOff=""
             android:textOn=""
             android:textSize="0sp" />
+
+        <ToggleButton
+            android:id="@+id/tb_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_baseline_search_24"
+            android:textOff=""
+            android:textOn=""
+            android:textSize="0sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -45,6 +54,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Category" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cnt_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/ed_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Text" />
+
+        <ImageButton
+            android:id="@+id/btn_prev"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_skip_previous_24" />
+
+        <ImageButton
+            android:id="@+id/btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_skip_next_24" />
+
     </LinearLayout>
 
     <View
