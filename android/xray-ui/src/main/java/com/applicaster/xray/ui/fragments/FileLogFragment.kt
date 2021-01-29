@@ -6,16 +6,21 @@ import android.os.FileObserver
 import android.text.TextUtils
 import android.text.format.Formatter
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import com.applicaster.xray.ui.R
 import com.applicaster.xray.crashreporter.Reporting
+import com.applicaster.xray.ui.R
+import com.applicaster.xray.ui.utility.SharedFileHelper.copyToDownloads
 import java.io.File
+import java.util.*
 
 class FileLogFragment : Fragment() {
 
@@ -25,8 +30,8 @@ class FileLogFragment : Fragment() {
 
     private var lblLigSize: TextView? = null
     private var logView: TextView? = null
-    private var btnClear: Button? = null
-    private var btnSend: Button? = null
+    private var btnClear: ImageButton? = null
+    private var btnSend: ImageButton? = null
 
     private val updater: Runnable = Runnable { reloadLog() }
     private lateinit var fileCreateListener: Runnable
@@ -153,8 +158,40 @@ class FileLogFragment : Fragment() {
     }
 
     private fun send() {
-        if (true == file?.exists()) {
-            Reporting.sendLogReport(activity!!, file)
+        if (true != file?.exists()) return
+
+        val items = arrayOf(
+            view!!.resources.getString(R.string.xray_btn_share_target_file),
+            view!!.resources.getString(R.string.xray_btn_share_target_intent)
+        )
+
+        AlertDialog.Builder(logView!!.context)
+            .setTitle(getString(R.string.xray_dlg_title_share_events))
+            .setNegativeButton(android.R.string.cancel, null)
+            .setSingleChoiceItems(items, -1) { d, which ->
+                when (which) {
+                    1 -> Reporting.sendLogReport(activity!!, file)
+                    else -> copyLogFile(activity!!, file!!)
+                }
+                d.dismiss()
+            }
+            .show()
+    }
+
+    private fun copyLogFile(context: Context, file: File) {
+        try {
+            copyToDownloads(
+                context,
+                file,
+                "${file.nameWithoutExtension}_${Date().time}.${file.extension}",
+                "text/*"
+            ).let {
+                Toast.makeText(context, "Log was saved to $it", Toast.LENGTH_LONG).show()
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error during copy", e)
+            Toast.makeText(context, "Error during copy ${e.message}", Toast.LENGTH_LONG)
+                .show()
         }
     }
 
@@ -188,5 +225,7 @@ class FileLogFragment : Fragment() {
 
         // max size that we will attempt to load automatically
         private const val SIZE_LIMIT = 100 * 1024L
+
+        private const val TAG: String = "FileLogFragment"
     }
 }

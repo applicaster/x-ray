@@ -12,6 +12,23 @@ import java.nio.charset.StandardCharsets
 
 object SharedFileHelper {
 
+    fun copyToDownloads(
+        context: Context,
+        file: File,
+        target: String,
+        mime: String
+    ): String? {
+        return when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q -> saveAndroidQ(
+                context,
+                file.readText(),
+                target,
+                mime
+            )
+            else -> file.copyTo(File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), target)).toString()
+        }
+    }
+
     /**
      * Try to save given string as a file to user Downloads folder.
      * Does not guarantee to return real path for Android 10+
