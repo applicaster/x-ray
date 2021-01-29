@@ -66,6 +66,8 @@ class EventLogFragment : Fragment() {
 
             // Wrap original list to filtered one
             val filteredList = FilteredEventList(viewLifecycleOwner, inMemoryLogSink.getLiveData())
+            // Here I rely on the fact that the EventRecyclerViewAdapter below will be notified after SearchState.
+            // Its not very good, since its not guaranteed, I just know that these observers are stored as a linked list internally.
             searchState = SearchState(filteredList, viewLifecycleOwner)
 
             // Setup log level filter spinner
