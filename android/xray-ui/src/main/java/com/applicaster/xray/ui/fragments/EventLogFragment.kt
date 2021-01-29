@@ -1,12 +1,14 @@
 package com.applicaster.xray.ui.fragments
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
@@ -14,9 +16,9 @@ import com.applicaster.xray.core.Core
 import com.applicaster.xray.core.LogLevel
 import com.applicaster.xray.ui.R
 import com.applicaster.xray.ui.adapters.EventRecyclerViewAdapter
+import com.applicaster.xray.ui.fragments.model.FilteredEventList
 import com.applicaster.xray.ui.fragments.model.SearchState
 import com.applicaster.xray.ui.sinks.InMemoryLogSink
-import com.applicaster.xray.ui.fragments.model.FilteredEventList
 
 /**
  * A fragment representing a list of Items.
@@ -55,11 +57,9 @@ class EventLogFragment : Fragment() {
         }
 
         // We expect our example Plugin to provide this sink as InMemoryLogSink
-        val inMemoryLogSink =
-            when (inMemorySinkName) {
-                null -> null
-                else -> Core.get().getSink(inMemorySinkName!!) as InMemoryLogSink?
-            }
+        val inMemoryLogSink = inMemorySinkName?.let {
+            Core.get().getSink(it) as? InMemoryLogSink?
+        }
 
         // todo: show message if sink is missing
         if (null != inMemoryLogSink) {
@@ -141,9 +141,41 @@ class EventLogFragment : Fragment() {
                 if (searchState.prev())
                     onSearchUpdated()
             }
+
             view.findViewById<View>(R.id.btn_next).setOnClickListener {
                 if (searchState.next())
                     onSearchUpdated()
+            }
+
+            view.findViewById<View>(R.id.btn_search_filter).setOnClickListener {
+                val mask = searchState.getMask()
+                val checkedItems = resources
+                    .getStringArray(R.array.xray_search_masks)
+                    .mapIndexed { i, _ -> mask and (1 shl i) != 0 }
+                    .toBooleanArray()
+
+                val l = object
+                    : DialogInterface.OnMultiChoiceClickListener
+                    , DialogInterface.OnClickListener {
+
+                    private var newMask = mask
+
+                    override fun onClick(dialog: DialogInterface?, which: Int, isChecked: Boolean) {
+                        val bit = 1 shl which
+                        newMask = if (isChecked) newMask.or(bit) else newMask.xor(bit)
+                    }
+
+                    override fun onClick(dialog: DialogInterface?, which: Int) {
+                        searchState.setMask(newMask)
+                        onSearchUpdated()
+                    }
+                }
+
+                AlertDialog.Builder(view.context)
+                    .setMultiChoiceItems(R.array.xray_search_masks, checkedItems, l)
+                    .setPositiveButton(android.R.string.ok, l)
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .show()
             }
         }
 

@@ -7,4 +7,13 @@
         <item>@color/colorLogWarning</item>
         <item>@color/colorLogError</item>
     </array>
+
+    <array name="xray_search_masks">
+        <item>Message</item>
+        <item>Category</item>
+        <item>Subsystem</item>
+        <item>Context</item>
+        <item>Data</item>
+    </array>
+
 </resources>
