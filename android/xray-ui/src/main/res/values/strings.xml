@@ -9,6 +9,9 @@
     <string name="shortcut_access">Shortcut access</string>
     <string name="file_log_level">File log level</string>
     <string name="xray_lbl_tap_for_details">Tap for details…</string>
+    <string name="xray_btn_share_target_file">To file</string>
+    <string name="xray_btn_share_target_intent">To application</string>
+    <string name="xray_dlg_title_share_events">Share events</string>
 
     <!-- https://stackoverflow.com/a/52308875 -->
     <attr name="sink_name" format="string|reference" />

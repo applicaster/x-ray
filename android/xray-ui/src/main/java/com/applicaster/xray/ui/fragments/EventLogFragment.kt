@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,14 +12,21 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.applicaster.xray.core.Core
+import com.applicaster.xray.core.Event
 import com.applicaster.xray.core.LogLevel
+import com.applicaster.xray.crashreporter.Reporting
 import com.applicaster.xray.ui.R
 import com.applicaster.xray.ui.adapters.EventRecyclerViewAdapter
 import com.applicaster.xray.ui.fragments.model.FilteredEventList
 import com.applicaster.xray.ui.fragments.model.SearchState
 import com.applicaster.xray.ui.sinks.InMemoryLogSink
+import com.applicaster.xray.ui.utility.GsonHolder
+import com.applicaster.xray.ui.utility.SharedFileHelper
+import java.util.*
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * A fragment representing a list of Items.
@@ -177,10 +185,80 @@ class EventLogFragment : Fragment() {
                     .setNegativeButton(android.R.string.cancel, null)
                     .show()
             }
+
+            view.findViewById<View>(R.id.btn_share).setOnClickListener {
+                share(view.context, inMemoryLogSink.getLiveData(), filteredList)
+            }
         }
 
         view.setTag(R.id.fragment_title_tag, getString(R.string.tab_title_events))
         return view
+    }
+
+    private fun share(
+        context: Context,
+        unfilteredList: LiveData<List<Event>>,
+        filteredList: LiveData<List<Event>>
+    ) {
+        // AtomicInteger is used just to keep the integer value as a reference
+        val shareType = AtomicInteger(0)
+
+        val shareListener = DialogInterface.OnClickListener { _, which ->
+            val events = when {
+                0 == shareType.get() -> filteredList.value!!
+                else -> unfilteredList.value!!
+            }
+            if(AlertDialog.BUTTON_POSITIVE == which)
+                shareEvents(context, events, ShareTarget.file)
+            else
+                shareEvents(context, events, ShareTarget.intent)
+        }
+
+        // uses neutral button for cancel since its visually outstanding one
+        AlertDialog.Builder(context)
+            .setTitle(getString(R.string.xray_dlg_title_share_events))
+            .setPositiveButton(R.string.xray_btn_share_target_file, shareListener)
+            .setNegativeButton(R.string.xray_btn_share_target_intent, shareListener)
+            .setNeutralButton(android.R.string.cancel, null)
+            .setSingleChoiceItems(
+                R.array.xray_share_events_type, 0
+            ) { _, which -> shareType.set(which) }
+            .show()
+    }
+
+    private enum class ShareTarget {
+        file,
+        intent
+    }
+
+    private fun shareEvents(
+        ctx: Context,
+        events: List<Event>,
+        target: ShareTarget
+    ) {
+        if(events.isEmpty()) {
+            Toast.makeText(context, "No events to share", Toast.LENGTH_LONG).show()
+            return
+        }
+        try {
+            val json = GsonHolder.gson.toJson(events)
+            if (ShareTarget.intent == target) {
+                ctx.openFileOutput("events.json", 0).use { it.write(json.toByteArray()) }
+                Reporting.sendLogReport(activity!!, ctx.getFileStreamPath("events.json"))
+            } else {
+                val file = SharedFileHelper.saveToDownloads(
+                    ctx,
+                    json,
+                    "events_${Date().time}.json",
+                    "application/json"
+                )
+                Toast.makeText(context, "Log was saved to $file", Toast.LENGTH_LONG).show()
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error during export", e)
+            Toast.makeText(context, "Error during export ${e.message}", Toast.LENGTH_LONG)
+                .show()
+        }
     }
 
     companion object {
@@ -195,5 +273,6 @@ class EventLogFragment : Fragment() {
         }
 
         private const val ARG_SINK_NAME: String = "sink_name"
+        private const val TAG: String = "EventLogFragment"
     }
 }

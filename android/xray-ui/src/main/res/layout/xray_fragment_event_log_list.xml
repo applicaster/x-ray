@@ -14,12 +14,12 @@
         <Spinner
             android:id="@+id/cb_filter"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <ToggleButton
             android:id="@+id/tb_filter"
-            android:layout_width="wrap_content"
+            android:layout_width="52dp"
             android:layout_height="wrap_content"
             android:drawableTop="@drawable/ic_baseline_filter_list_24"
             android:textOff=""
@@ -28,12 +28,18 @@
 
         <ToggleButton
             android:id="@+id/tb_search"
-            android:layout_width="wrap_content"
+            android:layout_width="52dp"
             android:layout_height="wrap_content"
             android:drawableTop="@drawable/ic_baseline_search_24"
             android:textOff=""
             android:textOn=""
             android:textSize="0sp" />
+
+        <ImageButton
+            android:id="@+id/btn_share"
+            android:layout_width="52dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_baseline_share_24" />
     </LinearLayout>
 
     <LinearLayout

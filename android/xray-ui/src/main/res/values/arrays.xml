@@ -16,4 +16,10 @@
         <item>Data</item>
     </array>
 
+    <array name="xray_share_events_type">
+        <item>Filtered</item>
+        <item>All</item>
+    </array>
+
+
 </resources>
