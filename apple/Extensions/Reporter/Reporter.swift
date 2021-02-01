@@ -10,7 +10,7 @@ import Foundation
 import MessageUI
 
 public protocol StorableSinkDelegate {
-    func getLogFileUrl(_ completion: ((URL?) -> ())?)
+    func getLogFileUrl(_ completion: ((URL?) -> Void)?)
     func deleteLogFile()
 }
 
@@ -34,19 +34,25 @@ public class Reporter {
             print("Cannot send email, at least one sender must be defined")
             return
         }
-        
-        sharedLogFileSinkDelegate?.getLogFileUrl({ (url) in
+
+        guard sharedInstance.email.canSendMail() else {
+            let alert = UIAlertController(title: "Cannot send email", message: "Please check if your device has email configured", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            sharedInstance.email.presentController(vc: alert)
+            return
+        }
+
+        sharedLogFileSinkDelegate?.getLogFileUrl({ url in
             if let url = url {
                 sharedInstance.email.requestSendEmail(emails: sharedEmails,
                                                       sharedFileURL: url,
                                                       contexts: sharedContexts,
                                                       attachments: nil,
                                                       completion: {
-                                                        sharedLogFileSinkDelegate?.deleteLogFile()
+                                                          sharedLogFileSinkDelegate?.deleteLogFile()
                                                       })
             }
         })
-        
     }
 
     public static func requestSendCustomEmail(attachments: [EmailAttachment]? = nil) {
@@ -60,7 +66,7 @@ public class Reporter {
                                               contexts: sharedContexts,
                                               attachments: attachments,
                                               completion: {
-                                                sharedLogFileSinkDelegate?.deleteLogFile()
+                                                  sharedLogFileSinkDelegate?.deleteLogFile()
                                               })
     }
 }

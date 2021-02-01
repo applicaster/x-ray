@@ -16,8 +16,8 @@ class Email: NSObject, MFMailComposeViewControllerDelegate {
     public var emailContextData: [String: AnyObject] = [:]
     public var emailAttachments: [EmailAttachment] = []
     var mailComposeViewController: MFMailComposeViewController?
-    var mailComposerCompletion: (() -> ())?
-    
+    var mailComposerCompletion: (() -> Void)?
+
     deinit {
         print("Deinit")
     }
@@ -26,7 +26,7 @@ class Email: NSObject, MFMailComposeViewControllerDelegate {
                           sharedFileURL: URL? = nil,
                           contexts: [String: Any]?,
                           attachments: [EmailAttachment]? = nil,
-                          completion: (() -> ())?) {
+                          completion: (() -> Void)?) {
         if (mailComposeViewController?.presentedViewController) != nil {
             mailComposeViewController?.dismiss(animated: false, completion: { [weak self] in
                 guard let self = self else { return }
@@ -45,43 +45,39 @@ class Email: NSObject, MFMailComposeViewControllerDelegate {
         }
     }
 
+    func canSendMail() -> Bool {
+        return MFMailComposeViewController.canSendMail()
+    }
+
     func createMailComposerViewController(emails: [String],
                                           sharedFileURL: URL? = nil,
                                           contexts: [String: Any]?,
                                           attachments: [EmailAttachment]? = nil,
-                                          completion: (() -> ())?) {
+                                          completion: (() -> Void)?) {
         mailComposerCompletion = completion
-        if MFMailComposeViewController.canSendMail() {
-            let mail = MFMailComposeViewController()
-            mail.setSubject(emailSubject)
-            mail.setToRecipients(emails)
-            mail.setMessageBody(createMessageBody(contexts: contexts),
-                                isHTML: false)
+        let mail = MFMailComposeViewController()
+        mail.setSubject(emailSubject)
+        mail.setToRecipients(emails)
+        mail.setMessageBody(createMessageBody(contexts: contexts),
+                            isHTML: false)
 
-            if let sharedFileURL = sharedFileURL,
-                let data = dataFromURL(url: sharedFileURL) {
-                mail.addAttachmentData(data,
-                                       mimeType: mimeTypeFromURL(url: sharedFileURL),
-                                       fileName: sharedFileURL.lastPathComponent)
-            }
-
-            if let attachments = attachments {
-                for attachment in attachments {
-                    mail.addAttachmentData(attachment.data,
-                                           mimeType: attachment.mimeType,
-                                           fileName: attachment.fileName)
-                }
-            }
-
-            mail.mailComposeDelegate = self
-            presentController(vc: mail)
-        } else {
-            let alert = UIAlertController(title: "Cannot send email", message: "Please check if your device has email configured", preferredStyle: .alert)
-
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            presentController(vc: alert)
-            mailComposerCompletion?()
+        if let sharedFileURL = sharedFileURL,
+           let data = dataFromURL(url: sharedFileURL) {
+            mail.addAttachmentData(data,
+                                   mimeType: mimeTypeFromURL(url: sharedFileURL),
+                                   fileName: sharedFileURL.lastPathComponent)
         }
+
+        if let attachments = attachments {
+            for attachment in attachments {
+                mail.addAttachmentData(attachment.data,
+                                       mimeType: attachment.mimeType,
+                                       fileName: attachment.fileName)
+            }
+        }
+
+        mail.mailComposeDelegate = self
+        presentController(vc: mail)
     }
 
     func createMessageBody(contexts: [String: Any]?) -> String {
@@ -89,9 +85,12 @@ class Email: NSObject, MFMailComposeViewControllerDelegate {
         guard let contexts = contexts else {
             return retVal
         }
+        // sort by key
+        let sortedContexts = contexts.sorted { $0.0 < $1.0 }
+
         retVal.append("\n")
-        for context in contexts {
-            retVal.append("\(context.key):\(context.value)\n")
+        for context in sortedContexts {
+            retVal.append("\(context.key): \(context.value)\n")
         }
         retVal.append("\n")
         return retVal
