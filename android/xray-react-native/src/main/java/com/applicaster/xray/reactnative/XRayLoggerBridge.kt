@@ -24,15 +24,19 @@ class XRayLoggerBridge(reactContext: ReactApplicationContext)
         val category = eventData.getString("category")!!
         val subsystem = eventData.getString("subsystem")!!
         val level = eventData.getInt("level")
-        if(!Core.get().hasSinks(category, subsystem, level)) {
+        if (!Core.get().hasSinks(category, subsystem, level)) {
             return
+        }
+        val message = eventData.getString("message")
+        if(null == message) {
+            logger.e(NAME).message("Null message was passed")
         }
         val event = Event(
                 category,
                 subsystem,
                 System.currentTimeMillis(),
                 level,
-                eventData.getString("message")!!,
+                message ?: "null",
                 optHashMap(eventData, "data"),
                 optHashMap(eventData, "context"),
                 null
