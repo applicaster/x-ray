@@ -34,9 +34,7 @@ public class Reporter {
         }
 
         guard sharedInstance.email.canSendMail() else {
-            let alert = UIAlertController(title: "Cannot send email", message: "Please check if your device has email configured", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            sharedInstance.email.presentController(vc: alert)
+            presentAlertUnableToSendMail()
             return
         }
         
@@ -58,6 +56,11 @@ public class Reporter {
             print("Cannot send email, at least one sender must be defined")
             return
         }
+        
+        guard sharedInstance.email.canSendMail() else {
+            presentAlertUnableToSendMail()
+            return
+        }
 
         sharedInstance.email.requestSendEmail(emails: emails,
                                               sharedFileURL: nil,
@@ -66,6 +69,12 @@ public class Reporter {
                                               completion: {
                                                   sharedLogFileSinkDelegate?.deleteLogFile()
                                               })
+    }
+    
+    static func presentAlertUnableToSendMail() {
+        let alert = UIAlertController(title: "Cannot send email", message: "Please check if your device has email configured", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        sharedInstance.email.presentController(vc: alert)
     }
     
     static var contexts:[String: Any]? {
