@@ -22,7 +22,7 @@ class DataSortFilterHelper {
 
     static func applyFilter(for filterModel: DataSortFilterModel,
                             events: [Event]) -> [Event] {
-        guard let filterText = filterModel.filterText,
+        guard let filterText = filterModel.filterText?.lowercased(),
               filterText.count > 0 else {
             return events
         }
