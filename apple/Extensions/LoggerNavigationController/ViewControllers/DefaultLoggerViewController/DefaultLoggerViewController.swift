@@ -12,7 +12,6 @@ import UIKit
 import XrayLogger
 
 class DefaultLoggerViewController: LoggerViewBaseController {
-
     override func prepareLogger() {
         title = "Logger"
 

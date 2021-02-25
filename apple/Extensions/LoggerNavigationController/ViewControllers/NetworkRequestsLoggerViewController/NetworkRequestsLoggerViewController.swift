@@ -12,7 +12,6 @@ import UIKit
 import XrayLogger
 
 class NetworkRequestsLoggerViewController: LoggerViewBaseController {
-
     override func prepareLogger() {
         title = "Network Requests"
 
