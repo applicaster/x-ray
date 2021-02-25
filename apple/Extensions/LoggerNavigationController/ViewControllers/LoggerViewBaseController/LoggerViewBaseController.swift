@@ -1,9 +1,9 @@
 //
-//  LoggerViewController.swift
-//  ExampleProject
+//  LoggerViewBaseController.swift
+//  Xray
 //
-//  Created by Anton Kononenko on 7/20/20.
-//  Copyright © 2020 Applicaster. All rights reserved.
+//  Created by Alex Zchut on 02/25/21.
+//  Copyright © 2021 Applicaster. All rights reserved.
 //
 
 import MessageUI
@@ -11,16 +11,17 @@ import Reporter
 import UIKit
 import XrayLogger
 
-class LoggerViewController: UIViewController {
+public class LoggerViewBaseController: UIViewController {
     private let cellIdentifier = "LoggerCell"
     private let screenIdentifier = "LoggerScreen"
-
+    var className: String = ""
+    
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var sortLogsView: SortLogsView!
     @IBOutlet weak var resetFilterBarButtonItem: UIBarButtonItem!
 
-    private(set) weak var inMemorySink: InMemory?
+    public weak var activeSink: BaseSink?
 
     // Original data source returned from sink
     var originalDataSource: [Event] = []
@@ -31,7 +32,7 @@ class LoggerViewController: UIViewController {
     // Filtered models by filter DataSortFilterModel and log type buttons
     var filteredDataSourceByType: [Event] = []
 
-    var filterModels: [DataSortFilterModel] = DataSortFilterHelper.dataFromUserDefaults()
+    var filterModels: [DataSortFilterModel] = []
 
     var formatter: EventFormatterProtocol?
     var sortParams = SortLogsHelper.dataFromUserDefaults()
@@ -47,30 +48,28 @@ class LoggerViewController: UIViewController {
     public var format = "yyyy-MM-dd HH:mm:ssZ"
 
     deinit {
-        inMemorySink = nil
+        activeSink = nil
     }
 
-    override func awakeFromNib() {
+    public override func awakeFromNib() {
         super.awakeFromNib()
+        className = "\(type(of: self))"
+        
         xibSetup()
+        filtersSetup()
         initilizeSortData()
         collectionViewSetup()
         prepareLogger()
     }
 
-//
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-//            layout.estimatedItemSize = CGSize(width: self.collectionView.frame.size.width, height: 200)
-//            layout.invalidateLayout()
-//        }
-//
-//    }
-    override func viewDidLayoutSubviews() {
+    public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
     }
 
+    func filtersSetup() {
+        filterModels = DataSortFilterHelper.dataFromUserDefaults(source: className)
+    }
+    
     func xibSetup() {
         guard let view = loadViewFromNib() else { return }
         view.frame = self.view.bounds
@@ -80,15 +79,7 @@ class LoggerViewController: UIViewController {
     }
 
     func prepareLogger() {
-        title = "Logger Screen"
-
-        let inMemorySink = Xray.sharedInstance.getSink("InMemorySink") as? InMemory
-        self.inMemorySink = inMemorySink
-        if let events = inMemorySink?.events {
-            originalDataSource = events
-            filterDataSource()
-//            collectionView.reloadData()
-        }
+        //override in child classes
     }
 
     func collectionViewSetup() {
@@ -99,8 +90,9 @@ class LoggerViewController: UIViewController {
                                  forCellWithReuseIdentifier: cellIdentifier)
     }
 
+    //override in child classes
     func loadViewFromNib() -> UIView? {
-        let nibName = "LoggerViewController"
+        let nibName = className
         let bundle = Bundle(for: type(of: self))
         let nib = UINib(nibName: nibName, bundle: bundle)
         return nib.instantiate(
@@ -139,7 +131,7 @@ class LoggerViewController: UIViewController {
     func applyNewFilters(newData: [DataSortFilterModel]) {
         if filterModels != newData {
             filterModels = newData
-            DataSortFilterHelper.saveDataToUserDefaults(dataToSave: filterModels)
+            DataSortFilterHelper.saveDataToUserDefaults(source: className, dataToSave: filterModels)
             filterDataSource()
             collectionView.reloadData()
             if self.filteredDataSourceByType.count > 0 {
@@ -167,8 +159,8 @@ class LoggerViewController: UIViewController {
     }
 }
 
-extension LoggerViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+extension LoggerViewBaseController: UICollectionViewDelegate {
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let bundle = Bundle(for: type(of: self))
         let detailedViewController = DetailedLoggerViewController(nibName: "DetailedLoggerViewController",
                                                                   bundle: bundle)
@@ -180,13 +172,13 @@ extension LoggerViewController: UICollectionViewDelegate {
     }
 }
 
-extension LoggerViewController: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView,
+extension LoggerViewBaseController: UICollectionViewDataSource {
+    public func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         return filteredDataSourceByType.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier,
                                                       for: indexPath) as! LoggerCell
         let event = filteredDataSourceByType[indexPath.row]
@@ -198,13 +190,13 @@ extension LoggerViewController: UICollectionViewDataSource {
     }
 }
 
-extension LoggerViewController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+extension LoggerViewBaseController: UICollectionViewDelegateFlowLayout {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.bounds.size.width, height: 120)
     }
 }
 
-extension LoggerViewController: SortLogsViewDelegate {
+extension LoggerViewBaseController: SortLogsViewDelegate {
     func userPushButon(logType: LogLevel, selected: Bool) {
         sortParams[logType.rawValue] = selected
         SortLogsHelper.saveDataToUserDefaults(dataToSave: sortParams)
@@ -230,7 +222,7 @@ extension LoggerViewController: SortLogsViewDelegate {
     }
 }
 
-extension LoggerViewController: FilterViewControllerDelegate {
+extension LoggerViewBaseController: FilterViewControllerDelegate {
     func userDidSaveNewFilterData(filterModels: [DataSortFilterModel]) {
         applyNewFilters(newData: filterModels)
     }

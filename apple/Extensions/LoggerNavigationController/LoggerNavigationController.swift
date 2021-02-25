@@ -21,9 +21,9 @@ public class LoggerNavigationController: UINavigationController {
                            animated: false)
     }
 
-    static func loggerViewController() -> LoggerViewController {
+    static func loggerViewController() -> DefaultLoggerViewController {
         let bundle = Bundle(for: Self.self)
-        let loggerViewController = LoggerViewController(nibName: "LoggerViewController",
+        let loggerViewController = DefaultLoggerViewController(nibName: "DefaultLoggerViewController",
                                                         bundle: bundle)
         
         NSSetUncaughtExceptionHandler { (exception) in

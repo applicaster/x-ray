@@ -73,8 +73,10 @@ class DataSortFilterHelper {
         }
     }
 
-    static func dataFromUserDefaults() -> [DataSortFilterModel] {
-        guard let data = UserDefaults.standard.value(forKey: filterModelsStorageKey) as? [[String: Any]] else {
+    static func dataFromUserDefaults(source: String) -> [DataSortFilterModel] {
+        let storageKey = "\(source).\(filterModelsStorageKey)"
+
+        guard let data = UserDefaults.standard.value(forKey: storageKey) as? [[String: Any]] else {
             return []
         }
         var filterModels: [DataSortFilterModel] = []
@@ -87,10 +89,11 @@ class DataSortFilterHelper {
         return filterModels
     }
 
-    static func saveDataToUserDefaults(dataToSave: [DataSortFilterModel]) {
+    static func saveDataToUserDefaults(source: String, dataToSave: [DataSortFilterModel]) {
         let mapedDict = dataToSave.map({ $0.toDict() })
 
+        let storageKey = "\(source).\(filterModelsStorageKey)"
         UserDefaults.standard.set(mapedDict,
-                                  forKey: filterModelsStorageKey)
+                                  forKey: storageKey)
     }
 }
