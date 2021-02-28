@@ -13,7 +13,7 @@
             <connections>
                 <outlet property="collectionView" destination="DYV-C0-pBf" id="2an-5k-G0k"/>
                 <outlet property="resetFilterBarButtonItem" destination="pd4-ED-5G0" id="nn1-AG-UmM"/>
-                <outlet property="sortLogsView" destination="20q-sV-6nt" id="YMg-0V-5nz"/>
+                <outlet property="sortNetworkRequestsView" destination="20q-sV-6nt" id="7pB-iF-yId"/>
                 <outlet property="view" destination="iN0-l3-epB" id="TCL-WJ-zdx"/>
             </connections>
         </placeholder>
@@ -22,50 +22,42 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="20q-sV-6nt" customClass="SortLogsView" customModule="LoggerInfo" customModuleProvider="target">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="20q-sV-6nt" customClass="SortNetworkRequestsView" customModule="LoggerInfo" customModuleProvider="target">
                     <rect key="frame" x="10" y="60" width="355" height="40"/>
                     <subviews>
                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="v3P-Oa-wsG">
                             <rect key="frame" x="0.0" y="0.0" width="355" height="40"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eue-RX-Mda" customClass="LogButton" customModule="LoggerInfo" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="67" height="40"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eue-RX-Mda" userLabel="2xx" customClass="NetworkRequestsSortButton" customModule="LoggerInfo" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="85" height="40"/>
                                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
-                                    <state key="normal" title="VERBOSE"/>
+                                    <state key="normal" title="200..299"/>
                                     <connections>
-                                        <action selector="handleLogType:" destination="20q-sV-6nt" eventType="touchUpInside" id="x49-be-3Yf"/>
+                                        <action selector="handleStatusCode:" destination="20q-sV-6nt" eventType="touchUpInside" id="zCh-x9-vBj"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oyh-9M-74Q" customClass="LogButton" customModule="LoggerInfo" customModuleProvider="target">
-                                    <rect key="frame" x="72" y="0.0" width="67" height="40"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oyh-9M-74Q" userLabel="3xx" customClass="NetworkRequestsSortButton" customModule="LoggerInfo" customModuleProvider="target">
+                                    <rect key="frame" x="90" y="0.0" width="85" height="40"/>
                                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
-                                    <state key="normal" title="DEBUG"/>
+                                    <state key="normal" title="300..399"/>
                                     <connections>
-                                        <action selector="handleLogType:" destination="20q-sV-6nt" eventType="touchUpInside" id="tZ0-lR-pBI"/>
+                                        <action selector="handleStatusCode:" destination="20q-sV-6nt" eventType="touchUpInside" id="YXI-EW-5Ww"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oNP-HS-ZrH" customClass="LogButton" customModule="LoggerInfo" customModuleProvider="target">
-                                    <rect key="frame" x="144" y="0.0" width="67" height="40"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oNP-HS-ZrH" userLabel="4xx" customClass="NetworkRequestsSortButton" customModule="LoggerInfo" customModuleProvider="target">
+                                    <rect key="frame" x="180" y="0.0" width="85" height="40"/>
                                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
-                                    <state key="normal" title="INFO"/>
+                                    <state key="normal" title="400..499"/>
                                     <connections>
-                                        <action selector="handleLogType:" destination="20q-sV-6nt" eventType="touchUpInside" id="zMd-dX-DeZ"/>
+                                        <action selector="handleStatusCode:" destination="20q-sV-6nt" eventType="touchUpInside" id="lig-q0-gnZ"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qd4-ZT-qAg" customClass="LogButton" customModule="LoggerInfo" customModuleProvider="target">
-                                    <rect key="frame" x="216" y="0.0" width="67" height="40"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qd4-ZT-qAg" userLabel="5xx" customClass="NetworkRequestsSortButton" customModule="LoggerInfo" customModuleProvider="target">
+                                    <rect key="frame" x="270" y="0.0" width="85" height="40"/>
                                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
-                                    <state key="normal" title="WARNING"/>
+                                    <state key="normal" title="500..599"/>
                                     <connections>
-                                        <action selector="handleLogType:" destination="20q-sV-6nt" eventType="touchUpInside" id="ScU-FW-BSl"/>
-                                    </connections>
-                                </button>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j3M-rV-RU0" customClass="LogButton" customModule="LoggerInfo" customModuleProvider="target">
-                                    <rect key="frame" x="288" y="0.0" width="67" height="40"/>
-                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
-                                    <state key="normal" title="ERROR"/>
-                                    <connections>
-                                        <action selector="handleLogType:" destination="20q-sV-6nt" eventType="touchUpInside" id="JQc-I1-s1L"/>
+                                        <action selector="handleStatusCode:" destination="20q-sV-6nt" eventType="touchUpInside" id="HER-pv-ftS"/>
                                     </connections>
                                 </button>
                             </subviews>
@@ -82,11 +74,10 @@
                         <constraint firstItem="v3P-Oa-wsG" firstAttribute="top" secondItem="O5o-ah-2FK" secondAttribute="top" id="du2-Uh-o3a"/>
                     </constraints>
                     <connections>
-                        <outlet property="debugButton" destination="Oyh-9M-74Q" id="KxN-ys-ZMW"/>
-                        <outlet property="errorButton" destination="j3M-rV-RU0" id="Web-f4-fPV"/>
-                        <outlet property="infoButton" destination="oNP-HS-ZrH" id="f4E-1A-HOk"/>
-                        <outlet property="verboseButton" destination="Eue-RX-Mda" id="nr4-Z1-2XB"/>
-                        <outlet property="warningButton" destination="Qd4-ZT-qAg" id="cmp-Y6-R6E"/>
+                        <outlet property="button200" destination="Eue-RX-Mda" id="uWa-Uq-dqQ"/>
+                        <outlet property="button300" destination="Oyh-9M-74Q" id="rzQ-cQ-cNg"/>
+                        <outlet property="button400" destination="oNP-HS-ZrH" id="asz-sU-TbV"/>
+                        <outlet property="button500" destination="Qd4-ZT-qAg" id="H0y-vo-BI7"/>
                     </connections>
                 </view>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="DYV-C0-pBf">

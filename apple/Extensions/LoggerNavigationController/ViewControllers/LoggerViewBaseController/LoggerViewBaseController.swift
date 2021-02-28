@@ -12,13 +12,11 @@ import UIKit
 import XrayLogger
 
 public class LoggerViewBaseController: UIViewController {
-    private let cellIdentifier = "LoggerCell"
     private let screenIdentifier = "LoggerScreen"
     var className: String = ""
     
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var sortLogsView: SortLogsView!
     @IBOutlet weak var resetFilterBarButtonItem: UIBarButtonItem!
 
     public weak var activeSink: BaseSink?
@@ -35,7 +33,6 @@ public class LoggerViewBaseController: UIViewController {
     var filterModels: [DataSortFilterModel] = []
 
     var formatter: EventFormatterProtocol?
-    var sortParams = SortLogsHelper.dataFromUserDefaults()
     var asynchronously: Bool {
         get {
             return false
@@ -43,6 +40,8 @@ public class LoggerViewBaseController: UIViewController {
         set(newValue) {
         }
     }
+    
+    var sortParams: [Int: Bool] = [:]
 
     let dateFormatter = DateFormatter()
     public var format = "yyyy-MM-dd HH:mm:ssZ"
@@ -81,13 +80,28 @@ public class LoggerViewBaseController: UIViewController {
     func prepareLogger() {
         //override in child classes
     }
+    
+    func getSortParams() -> [Int: Bool] {
+        //override in child classes
+        return [:]
+    }
+    
+    func getCellIdentifier() -> String {
+        //override in child classes
+        return "undefined"
+    }
+    
+    func initilizeSortData() {
+        //override in child classes
+        sortParams = getSortParams()
+    }
 
     func collectionViewSetup() {
         let bundle = Bundle(for: type(of: self))
 
-        collectionView?.register(UINib(nibName: cellIdentifier,
+        collectionView?.register(UINib(nibName: getCellIdentifier(),
                                        bundle: bundle),
-                                 forCellWithReuseIdentifier: cellIdentifier)
+                                 forCellWithReuseIdentifier: getCellIdentifier())
     }
 
     //override in child classes
@@ -150,12 +164,8 @@ public class LoggerViewBaseController: UIViewController {
     }
 
     func filterDataSourceByType() -> [Event] {
-        return filteredDataSource.filter { (event) -> Bool in
-            if let selected = sortParams[event.level.rawValue] {
-                return selected
-            }
-            return false
-        }
+        //override in child classes
+        return []
     }
 }
 
@@ -179,46 +189,20 @@ extension LoggerViewBaseController: UICollectionViewDataSource {
     }
 
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier,
-                                                      for: indexPath) as! LoggerCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: getCellIdentifier(),
+                                                      for: indexPath) as? LoggerCellProtocol
         let event = filteredDataSourceByType[indexPath.row]
         let formattedDate = dateStringFromEvent(event: event)
-        cell.updateCell(event: event,
+        cell?.updateCell(event: event,
                         dateString: formattedDate)
 
-        return cell
+        return cell as! UICollectionViewCell
     }
 }
 
 extension LoggerViewBaseController: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.bounds.size.width, height: 120)
-    }
-}
-
-extension LoggerViewBaseController: SortLogsViewDelegate {
-    func userPushButon(logType: LogLevel, selected: Bool) {
-        sortParams[logType.rawValue] = selected
-        SortLogsHelper.saveDataToUserDefaults(dataToSave: sortParams)
-        reloadCollectionViewWithFilters()
-    }
-
-    func reloadCollectionViewWithFilters() {
-        let newFilteredDataSource = filterDataSourceByType()
-        if filteredDataSourceByType != newFilteredDataSource {
-            filteredDataSourceByType = newFilteredDataSource
-            collectionView.reloadData()
-            if self.filteredDataSourceByType.count > 0 {
-                self.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0),
-                                                 at: .top,
-                                                 animated: false)
-            }
-        }
-    }
-
-    func initilizeSortData() {
-        sortLogsView.delegate = self
-        sortLogsView.initializeButtons(defaultStates: sortParams)
     }
 }
 

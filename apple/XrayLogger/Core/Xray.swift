@@ -46,6 +46,54 @@ public enum LogLevel: NSInteger {
     }
 }
 
+public enum NetworkRequestStatusCode: NSInteger {
+    case x000 = 0
+    case x200 = 200
+    case x300 = 300
+    case x400 = 400
+    case x500 = 500
+
+    public init?(statusCode: String) {
+        let stringValue = "\(statusCode.first ?? "1")00"
+        guard let intValue = Int(stringValue),
+              let value = NetworkRequestStatusCode(rawValue: intValue) else {
+            return nil
+        }
+        self = value
+    }
+    
+    public func toString() -> String {
+        switch self {
+        case .x200:
+            return "200..299"
+        case .x300:
+            return "300..399"
+        case .x400:
+            return "400..499"
+        case .x500:
+            return "500..599"
+        default:
+            return "0"
+        }
+    }
+
+    public func toColor() -> UIColor {
+        switch self {
+        case .x200:
+            return UIColor(red: 50 / 255, green: 172 / 255, blue: 65 / 255, alpha: 1)
+        case .x300:
+            return UIColor(red: 252 / 255, green: 218 / 255, blue: 157 / 255, alpha: 1)
+        case .x400:
+            return UIColor(red: 232 / 255, green: 129 / 255, blue: 26 / 255, alpha: 1)
+        case .x500:
+            return UIColor(red: 228 / 255, green: 35 / 255, blue: 40 / 255, alpha: 1)
+        default:
+            return UIColor.white
+        }
+    }
+}
+
+
 public class Xray: NSObject {
     public static let sharedInstance = Xray()
 

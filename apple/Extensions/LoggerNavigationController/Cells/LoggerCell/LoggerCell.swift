@@ -9,7 +9,12 @@
 import UIKit
 import XrayLogger
 
-class LoggerCell: UICollectionViewCell {
+public protocol LoggerCellProtocol {
+    func updateCell(event: Event,
+                    dateString: String)
+}
+
+class LoggerCell: UICollectionViewCell, LoggerCellProtocol {
     @IBOutlet weak var loggerTypeView: UIView!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var subsystemLabel: UILabel!
