@@ -52,13 +52,9 @@ class LoggerNetworkRequestCell: UICollectionViewCell, LoggerCellProtocol {
         return event.data?["url"] as? String ?? event.message.replacingOccurrences(of: "Network Request: ", with: "")
     }
     
-    fileprivate func statusCode(from event: Event) -> String? {
-        return event.data?["statusCode"] as? String
-    }
-    
     fileprivate func networkRequestStatusCode(from event: Event) -> (networkRequestStatusCode: NetworkRequestStatusCode,
                                                          httpStatusCode: HTTPStatusCode?)? {
-        guard let statusCodeString = statusCode(from: event),
+        guard let statusCodeString = event.networkRequestStatusCode,
               let networkRequestStatusCode = NetworkRequestStatusCode(statusCode: statusCodeString),
               let httpStatusCode = HTTPStatusCode(rawValue: Int(statusCodeString) ?? 0) else {
             return (NetworkRequestStatusCode.x000, nil)

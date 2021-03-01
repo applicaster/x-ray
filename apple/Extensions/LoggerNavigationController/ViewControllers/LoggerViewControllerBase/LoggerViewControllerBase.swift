@@ -1,5 +1,5 @@
 //
-//  LoggerViewBaseController.swift
+//  LoggerViewControllerBase.swift
 //  Xray
 //
 //  Created by Alex Zchut on 02/25/21.
@@ -11,7 +11,13 @@ import Reporter
 import UIKit
 import XrayLogger
 
-public class LoggerViewBaseController: UIViewController {
+public enum LoggerViewType {
+    case undefined
+    case logger
+    case networkRequests
+}
+
+public class LoggerViewControllerBase: UIViewController {
     private let screenIdentifier = "LoggerScreen"
     var className: String = ""
     
@@ -42,7 +48,8 @@ public class LoggerViewBaseController: UIViewController {
     }
     
     var sortParams: [Int: Bool] = [:]
-
+    var loggerType: LoggerViewType = .undefined
+    
     let dateFormatter = DateFormatter()
     public var format = "yyyy-MM-dd HH:mm:ssZ"
 
@@ -169,20 +176,21 @@ public class LoggerViewBaseController: UIViewController {
     }
 }
 
-extension LoggerViewBaseController: UICollectionViewDelegate {
+extension LoggerViewControllerBase: UICollectionViewDelegate {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let bundle = Bundle(for: type(of: self))
         let detailedViewController = DetailedLoggerViewController(nibName: "DetailedLoggerViewController",
                                                                   bundle: bundle)
         let event = filteredDataSourceByType[indexPath.row]
         detailedViewController.event = event
+        detailedViewController.loggerType = loggerType
         detailedViewController.dateString = dateStringFromEvent(event: event)
         navigationController?.pushViewController(detailedViewController,
                                                  animated: true)
     }
 }
 
-extension LoggerViewBaseController: UICollectionViewDataSource {
+extension LoggerViewControllerBase: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         return filteredDataSourceByType.count
@@ -200,13 +208,13 @@ extension LoggerViewBaseController: UICollectionViewDataSource {
     }
 }
 
-extension LoggerViewBaseController: UICollectionViewDelegateFlowLayout {
+extension LoggerViewControllerBase: UICollectionViewDelegateFlowLayout {
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.bounds.size.width, height: 120)
     }
 }
 
-extension LoggerViewBaseController: FilterViewControllerDelegate {
+extension LoggerViewControllerBase: FilterViewControllerDelegate {
     func userDidSaveNewFilterData(filterModels: [DataSortFilterModel]) {
         applyNewFilters(newData: filterModels)
     }

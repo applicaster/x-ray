@@ -1,5 +1,5 @@
 //
-//  LoggerViewCollectionFlowLayout.swift
+//  SortNetworkRequestsHelper.swift
 //  LoggerInfo
 //
 //  Created by Alex Zchut on 02/28/21.

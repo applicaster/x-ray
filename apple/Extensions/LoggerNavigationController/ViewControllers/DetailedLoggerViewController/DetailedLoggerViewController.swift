@@ -6,84 +6,24 @@
 //  Copyright © 2020 Applicaster. All rights reserved.
 //
 
-import MessageUI
 import Reporter
 import UIKit
 import XrayLogger
-enum DetailedLoggerSections: Int {
-    case message
-    case category
-    case subsystem
-    case data
-    case context
-    case exception
 
-    func toString() -> String {
-        switch self {
-        case DetailedLoggerSections.message:
-            return "Message"
-        case DetailedLoggerSections.category:
-            return "Category"
-        case DetailedLoggerSections.subsystem:
-            return "Subsystem"
-        case DetailedLoggerSections.data:
-            return "Data"
-        case DetailedLoggerSections.context:
-            return "Context"
-        case DetailedLoggerSections.exception:
-            return "Exception"
-        }
-    }
-}
-
-class DetailedLoggerViewController: UIViewController, MFMailComposeViewControllerDelegate {
-    let cellIdentifier = "DetailedLoggerViewController"
+class DetailedLoggerViewController: DetailedLoggerBaseViewController {
+    var cellIdentifier = "DetailedLoggerViewController"
     let numberOfSections = 5 // Currently no Exception supported
     let numberOfRowsInSection = 2
-
-    @IBOutlet weak var backgroundDataView: UIView!
-    @IBOutlet weak var loggerTypeView: UIView!
-    @IBOutlet weak var logTypeLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var tableView: UITableView!
-
-    @IBAction func exportData(_ sender: UIBarButtonItem) {
-        if let event = event,
-            let data = event.toJSONString()?.data(using: .utf8),
-            let dateString = dateString {
-            let levelString = event.level.toString()
-            let attachment = EmailAttachment(data: data,
-                                             mimeType: "application/json",
-                                             fileName: "\(levelString)_\(dateString).json")
-
-            Reporter.requestSendCustomEmail(attachments: [attachment])
-        } else {
-            Reporter.requestSendCustomEmail(attachments: nil)
-        }
-    }
 
     @IBAction func readJSON(_ sender: UIBarButtonItem) {
         let bundle = Bundle(for: type(of: self))
         let detailedViewController = DetailedLoggerJSONViewController(nibName: "DetailedLoggerJSONViewController",
                                                                       bundle: bundle)
         detailedViewController.event = event
+        detailedViewController.loggerType = loggerType
         detailedViewController.dateString = dateString
         navigationController?.pushViewController(detailedViewController,
                                                  animated: true)
-    }
-
-    let defaultEventFormatter = DefaultEventFormatter()
-    var dateString: String?
-    var event: Event?
-
-    override init(nibName nibNameOrNil: String?,
-                  bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil,
-                   bundle: nibBundleOrNil)
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
     }
 
     override func viewDidLoad() {
@@ -91,16 +31,6 @@ class DetailedLoggerViewController: UIViewController, MFMailComposeViewControlle
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
         prepareUI()
         title = "Single Log"
-    }
-
-    func prepareUI() {
-        dateLabel.text = dateString
-        loggerTypeView.backgroundColor = event?.level.toColor()
-        backgroundDataView.roundCorners(radius: 10)
-        if let event = event {
-            logTypeLabel.text = event.level.toString()
-            logTypeLabel.textColor = event.level.toColor()
-        }
     }
 }
 
@@ -133,7 +63,7 @@ extension DetailedLoggerViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath,
                               animated: true)
         guard let event = event,
-            let currentSection = DetailedLoggerSections(rawValue: indexPath.section) else {
+              let currentSection = DetailedLoggerSections(rawValue: indexPath.section) else {
             return
         }
 
@@ -142,11 +72,11 @@ extension DetailedLoggerViewController: UITableViewDelegate {
                                                                         bundle: bundle)
         detailedViewController.event = event
         detailedViewController.dateString = dateString
-
+        detailedViewController.loggerType = loggerType
         switch currentSection {
         case DetailedLoggerSections.data:
             if let data = event.data,
-                data.count > 0 {
+               data.count > 0 {
                 detailedViewController.dataObject = data
                 detailedViewController.title = DetailedLoggerSections.data.toString()
                 navigationController?.pushViewController(detailedViewController,
@@ -154,7 +84,7 @@ extension DetailedLoggerViewController: UITableViewDelegate {
             }
         case DetailedLoggerSections.context:
             if let context = event.context,
-                context.count > 0 {
+               context.count > 0 {
                 detailedViewController.dataObject = context
                 detailedViewController.title = DetailedLoggerSections.context.toString()
                 navigationController?.pushViewController(detailedViewController,
@@ -173,8 +103,8 @@ extension DetailedLoggerViewController: UITableViewDelegate {
 }
 
 extension DetailedLoggerViewController {
-    func updateTypeCell(indexPath: IndexPath,
-                        cell: UITableViewCell) {
+    @objc func updateTypeCell(indexPath: IndexPath,
+                              cell: UITableViewCell) {
         cell.backgroundColor = UIColor.clear
         cell.textLabel?.numberOfLines = 0
         cell.textLabel?.textColor = UIColor.black
@@ -186,20 +116,20 @@ extension DetailedLoggerViewController {
         cell.accessoryType = isDiscosureIndicatorDisabled ? .none : .disclosureIndicator
 
         guard let event = event,
-            let currentSection = DetailedLoggerSections(rawValue: indexPath.section) else {
+              let currentSection = DetailedLoggerSections(rawValue: indexPath.section) else {
             return
         }
 
         switch currentSection {
         case DetailedLoggerSections.data:
             if let dataCount = event.data?.count,
-                dataCount == 0 {
+               dataCount == 0 {
                 cell.accessoryType = .none
                 cell.textLabel?.textColor = UIColor.darkGray
             }
         case DetailedLoggerSections.context:
             if let contextCount = event.context?.count,
-                contextCount == 0 {
+               contextCount == 0 {
                 cell.accessoryType = .none
                 cell.textLabel?.textColor = UIColor.darkGray
             }
@@ -213,8 +143,8 @@ extension DetailedLoggerViewController {
         }
     }
 
-    func updateDetailCell(indexPath: IndexPath,
-                          cell: UITableViewCell) {
+    @objc func updateDetailCell(indexPath: IndexPath,
+                                cell: UITableViewCell) {
         cell.textLabel?.numberOfLines = 0
         cell.textLabel?.textColor = UIColor.black
         cell.textLabel?.font = UIFont.systemFont(ofSize: 17)
@@ -223,7 +153,7 @@ extension DetailedLoggerViewController {
 
         let noDataText = "No data availible"
         guard let event = event,
-            let currentSection = DetailedLoggerSections(rawValue: indexPath.section) else {
+              let currentSection = DetailedLoggerSections(rawValue: indexPath.section) else {
             cell.textLabel?.text = noDataText
             return
         }

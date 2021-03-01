@@ -1,5 +1,5 @@
 //
-//  DefaultLoggerViewController.swift
+//  LoggerViewControllerDefault.swift
 //  Xray
 //
 //  Created by Anton Kononenko on 7/20/20.
@@ -11,12 +11,13 @@ import Reporter
 import UIKit
 import XrayLogger
 
-class DefaultLoggerViewController: LoggerViewBaseController {
+class LoggerViewControllerDefault: LoggerViewControllerBase {
     @IBOutlet var sortLogsView: SortLogsView!
 
     override func prepareLogger() {
         title = "Logger"
-
+        loggerType = .logger
+        
         let activeSink = Xray.sharedInstance.getSink("InMemorySink") as? InMemory
         self.activeSink = activeSink
         if let events = activeSink?.events {
@@ -50,7 +51,7 @@ class DefaultLoggerViewController: LoggerViewBaseController {
     }
 }
 
-extension DefaultLoggerViewController: SortLogsViewDelegate {
+extension LoggerViewControllerDefault: SortLogsViewDelegate {
     func userPushButon(logType: LogLevel, selected: Bool) {
         sortParams[logType.rawValue] = selected
         SortLogsHelper.saveDataToUserDefaults(dataToSave: sortParams)

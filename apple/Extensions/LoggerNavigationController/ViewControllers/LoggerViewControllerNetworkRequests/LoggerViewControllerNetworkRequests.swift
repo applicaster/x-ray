@@ -1,5 +1,5 @@
 //
-//  NetworkRequestsLoggerViewController.swift
+//  LoggerViewControllerNetworkRequests.swift
 //  Xray
 //
 //  Created by Alex Zchut on 02/25/21.
@@ -11,11 +11,12 @@ import Reporter
 import UIKit
 import XrayLogger
 
-class NetworkRequestsLoggerViewController: LoggerViewBaseController {
+class LoggerViewControllerNetworkRequests: LoggerViewControllerBase {
     @IBOutlet var sortNetworkRequestsView: SortNetworkRequestsView!
 
     override func prepareLogger() {
         title = "Network Requests"
+        loggerType = .networkRequests
 
         let activeSink = Xray.sharedInstance.getSink("InMemoryNetworkRequestsSink") as? InMemory
         self.activeSink = activeSink
@@ -41,7 +42,7 @@ class NetworkRequestsLoggerViewController: LoggerViewBaseController {
 
     override func filterDataSourceByType() -> [Event] {
         return filteredDataSource.filter { (event) -> Bool in
-            if let statusCodeString = event.data?["statusCode"] as? String,
+            if let statusCodeString = event.networkRequestStatusCode,
                let statusCode = NetworkRequestStatusCode(statusCode: statusCodeString),
                let selected = sortParams[statusCode.rawValue] {
                 return selected
@@ -51,7 +52,7 @@ class NetworkRequestsLoggerViewController: LoggerViewBaseController {
     }
 }
 
-extension NetworkRequestsLoggerViewController: SortNetworkRequestsViewDelegate {
+extension LoggerViewControllerNetworkRequests: SortNetworkRequestsViewDelegate {
     func userPushButton(statusCode: NetworkRequestStatusCode, selected: Bool) {
         sortParams[statusCode.rawValue] = selected
         SortNetworkRequestsHelper.saveDataToUserDefaults(dataToSave: sortParams)
