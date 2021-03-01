@@ -31,7 +31,7 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eue-RX-Mda" userLabel="2xx" customClass="NetworkRequestsSortButton" customModule="LoggerInfo" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="85" height="40"/>
                                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
-                                    <state key="normal" title="200..299"/>
+                                    <state key="normal" title="2xx"/>
                                     <connections>
                                         <action selector="handleStatusCode:" destination="20q-sV-6nt" eventType="touchUpInside" id="zCh-x9-vBj"/>
                                     </connections>
@@ -39,7 +39,7 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oyh-9M-74Q" userLabel="3xx" customClass="NetworkRequestsSortButton" customModule="LoggerInfo" customModuleProvider="target">
                                     <rect key="frame" x="90" y="0.0" width="85" height="40"/>
                                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
-                                    <state key="normal" title="300..399"/>
+                                    <state key="normal" title="3xx"/>
                                     <connections>
                                         <action selector="handleStatusCode:" destination="20q-sV-6nt" eventType="touchUpInside" id="YXI-EW-5Ww"/>
                                     </connections>
@@ -47,7 +47,7 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oNP-HS-ZrH" userLabel="4xx" customClass="NetworkRequestsSortButton" customModule="LoggerInfo" customModuleProvider="target">
                                     <rect key="frame" x="180" y="0.0" width="85" height="40"/>
                                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
-                                    <state key="normal" title="400..499"/>
+                                    <state key="normal" title="4xx"/>
                                     <connections>
                                         <action selector="handleStatusCode:" destination="20q-sV-6nt" eventType="touchUpInside" id="lig-q0-gnZ"/>
                                     </connections>
@@ -55,7 +55,7 @@
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qd4-ZT-qAg" userLabel="5xx" customClass="NetworkRequestsSortButton" customModule="LoggerInfo" customModuleProvider="target">
                                     <rect key="frame" x="270" y="0.0" width="85" height="40"/>
                                     <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
-                                    <state key="normal" title="500..599"/>
+                                    <state key="normal" title="5xx"/>
                                     <connections>
                                         <action selector="handleStatusCode:" destination="20q-sV-6nt" eventType="touchUpInside" id="HER-pv-ftS"/>
                                     </connections>

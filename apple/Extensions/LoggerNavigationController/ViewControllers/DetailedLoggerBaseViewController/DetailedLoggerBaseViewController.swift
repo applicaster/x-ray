@@ -84,10 +84,12 @@ class DetailedLoggerBaseViewController: UIViewController {
                 loggerTypeView.backgroundColor = event.level.toColor()
             case .networkRequests:
                 if let statusCodeString = event.networkRequestStatusCode,
-                   let networkRequestStatusCode = NetworkRequestStatusCode(statusCode: statusCodeString) {
-                    logTypeLabel.text = networkRequestStatusCode.toString()
+                   let networkRequestStatusCode = NetworkRequestStatusCode(statusCode: statusCodeString),
+                   let httpStatusCode = HTTPStatusCode(rawValue: Int(networkRequestStatusCode.rawValue)) {
+                    logTypeLabel.text = httpStatusCode.description
                     logTypeLabel.textColor = networkRequestStatusCode.toColor()
                     loggerTypeView.backgroundColor = networkRequestStatusCode.toColor()
+                    dateLabel.text = ""
                 }
 
             default:
@@ -96,3 +98,4 @@ class DetailedLoggerBaseViewController: UIViewController {
         }
     }
 }
+

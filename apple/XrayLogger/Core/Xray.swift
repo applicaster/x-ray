@@ -65,13 +65,13 @@ public enum NetworkRequestStatusCode: NSInteger {
     public func toString() -> String {
         switch self {
         case .x200:
-            return "200..299"
+            return "2xx"
         case .x300:
-            return "300..399"
+            return "3xx"
         case .x400:
-            return "400..499"
+            return "4xx"
         case .x500:
-            return "500..599"
+            return "5xx"
         default:
             return "0"
         }
