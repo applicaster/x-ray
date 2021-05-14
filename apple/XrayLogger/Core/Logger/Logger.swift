@@ -172,7 +172,7 @@ public class Logger: NSObject {
             retVal.merge(parent.getFullContext()) { _, new in new }
         }
         retVal.merge(context) { _, new in new }
-        return context
+        return retVal
     }
 
     public static func getLogger(for subsystem: String? = nil) -> Logger? {

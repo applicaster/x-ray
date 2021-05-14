@@ -6,7 +6,7 @@ source 'https://cdn.cocoapods.org/'
 # require_relative './scripts/autolink-react-dependencies.rb'
 # prefix = "../../node_modules/react-native"
 
-platform :ios, '11.0'
+platform :ios, '12.0'
 
 require 'resolv-replace'
 pre_install do |_installer|

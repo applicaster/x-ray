@@ -13,7 +13,7 @@ import com.applicaster.xray.core.Logger
 import com.applicaster.xray.crashreporter.Reporting
 import com.applicaster.xray.crashreporter.SendActivity
 import com.applicaster.xray.example.sinks.ElasticSink
-import com.applicaster.xray.example.sinks.InMemoryLogSink
+import com.applicaster.xray.ui.sinks.InMemoryLogSink
 import com.applicaster.xray.example.ui.MainActivity
 import com.applicaster.xray.formatters.message.reflactionformatter.ReflectionMessageFormatter
 import com.applicaster.xray.ui.notification.XRayNotification
@@ -25,7 +25,7 @@ class App : Application() {
     }
 
     companion object {
-        const val memory_sink_name = "memory_sink"
+        const val memory_sink_name = "memory_sink" // used in EventLogFragment sink_name field
     }
 
     private fun initXRay() {
@@ -33,8 +33,9 @@ class App : Application() {
         val fileLogSink =
             PackageFileLogSink(
                 this,
-                "default.log"
-            );
+                "default.log",
+                256 * 1024
+            )
         val errorFileLogSink =
             PackageFileLogSink(
                 this,
@@ -67,6 +68,7 @@ class App : Application() {
         XRayNotification.show(
             this,
             101,
+            null,
             actions
         )
 

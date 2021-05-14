@@ -20,29 +20,22 @@ class Mapper {
                    filter: SinkFilterProtocol?) {
         DispatchQueue.global(qos: .default).sync { [weak self] in
             guard let self = self else { return }
+            var newMappedSubsystem: [String: SinkFilterProtocol]?
 
-            let mappedSubsystem = self.loggerMapping[loggerSubsystem]
-            if var mappedSubsystem = mappedSubsystem {
-                if let filter = filter {
-                    mappedSubsystem[sinkIdentifier] = filter
-                } else {
-                    mappedSubsystem[sinkIdentifier] = nil
-                    if mappedSubsystem.isEmpty {
-                        self.loggerMapping[loggerSubsystem] = nil
-                    }
+            if let mappedSubsystem = self.loggerMapping[loggerSubsystem] {
+                newMappedSubsystem = mappedSubsystem
+                newMappedSubsystem?[sinkIdentifier] = filter
+                if mappedSubsystem.keys.count == 0 {
+                    newMappedSubsystem = nil
                 }
-                return
+            } else if let filter = filter {
+                newMappedSubsystem = [sinkIdentifier: filter]
             }
 
-            guard let filter = filter else {
-                return
-            }
-
-            self.loggerMapping[loggerSubsystem] = [sinkIdentifier: filter]
+            self.loggerMapping[loggerSubsystem] = newMappedSubsystem
         }
     }
 
-    
     private func getClosestMapping(loggerSubsystem: String) -> [String: SinkFilterProtocol]? {
         DispatchQueue.global(qos: .default).sync {
             if loggerSubsystem == "" {

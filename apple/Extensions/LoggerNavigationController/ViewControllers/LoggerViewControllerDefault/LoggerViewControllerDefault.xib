@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="LoggerViewControllerDefault" customModule="LoggerInfo" customModuleProvider="target">
+            <connections>
+                <outlet property="collectionView" destination="DYV-C0-pBf" id="2an-5k-G0k"/>
+                <outlet property="resetFilterBarButtonItem" destination="pd4-ED-5G0" id="nn1-AG-UmM"/>
+                <outlet property="sortLogsView" destination="20q-sV-6nt" id="YMg-0V-5nz"/>
+                <outlet property="view" destination="iN0-l3-epB" id="TCL-WJ-zdx"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="20q-sV-6nt" customClass="SortLogsView" customModule="LoggerInfo" customModuleProvider="target">
+                    <rect key="frame" x="10" y="60" width="355" height="40"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="v3P-Oa-wsG">
+                            <rect key="frame" x="0.0" y="0.0" width="355" height="40"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eue-RX-Mda" customClass="LogButton" customModule="LoggerInfo" customModuleProvider="target">
+                                    <rect key="frame" x="0.0" y="0.0" width="67" height="40"/>
+                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
+                                    <state key="normal" title="VERBOSE"/>
+                                    <connections>
+                                        <action selector="handleLogType:" destination="20q-sV-6nt" eventType="touchUpInside" id="x49-be-3Yf"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Oyh-9M-74Q" customClass="LogButton" customModule="LoggerInfo" customModuleProvider="target">
+                                    <rect key="frame" x="72" y="0.0" width="67" height="40"/>
+                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
+                                    <state key="normal" title="DEBUG"/>
+                                    <connections>
+                                        <action selector="handleLogType:" destination="20q-sV-6nt" eventType="touchUpInside" id="tZ0-lR-pBI"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oNP-HS-ZrH" customClass="LogButton" customModule="LoggerInfo" customModuleProvider="target">
+                                    <rect key="frame" x="144" y="0.0" width="67" height="40"/>
+                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
+                                    <state key="normal" title="INFO"/>
+                                    <connections>
+                                        <action selector="handleLogType:" destination="20q-sV-6nt" eventType="touchUpInside" id="zMd-dX-DeZ"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qd4-ZT-qAg" customClass="LogButton" customModule="LoggerInfo" customModuleProvider="target">
+                                    <rect key="frame" x="216" y="0.0" width="67" height="40"/>
+                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
+                                    <state key="normal" title="WARNING"/>
+                                    <connections>
+                                        <action selector="handleLogType:" destination="20q-sV-6nt" eventType="touchUpInside" id="ScU-FW-BSl"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j3M-rV-RU0" customClass="LogButton" customModule="LoggerInfo" customModuleProvider="target">
+                                    <rect key="frame" x="288" y="0.0" width="67" height="40"/>
+                                    <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="13"/>
+                                    <state key="normal" title="ERROR"/>
+                                    <connections>
+                                        <action selector="handleLogType:" destination="20q-sV-6nt" eventType="touchUpInside" id="JQc-I1-s1L"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </stackView>
+                    </subviews>
+                    <viewLayoutGuide key="safeArea" id="O5o-ah-2FK"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="v3P-Oa-wsG" firstAttribute="bottom" secondItem="O5o-ah-2FK" secondAttribute="bottom" id="26t-Nn-XN5"/>
+                        <constraint firstAttribute="height" constant="40" id="A2R-rP-bSv"/>
+                        <constraint firstItem="v3P-Oa-wsG" firstAttribute="trailing" secondItem="O5o-ah-2FK" secondAttribute="trailing" id="SET-Og-5CV"/>
+                        <constraint firstItem="v3P-Oa-wsG" firstAttribute="leading" secondItem="O5o-ah-2FK" secondAttribute="leading" id="YG0-FF-Wao"/>
+                        <constraint firstItem="v3P-Oa-wsG" firstAttribute="top" secondItem="O5o-ah-2FK" secondAttribute="top" id="du2-Uh-o3a"/>
+                    </constraints>
+                    <connections>
+                        <outlet property="debugButton" destination="Oyh-9M-74Q" id="KxN-ys-ZMW"/>
+                        <outlet property="errorButton" destination="j3M-rV-RU0" id="Web-f4-fPV"/>
+                        <outlet property="infoButton" destination="oNP-HS-ZrH" id="f4E-1A-HOk"/>
+                        <outlet property="verboseButton" destination="Eue-RX-Mda" id="nr4-Z1-2XB"/>
+                        <outlet property="warningButton" destination="Qd4-ZT-qAg" id="cmp-Y6-R6E"/>
+                    </connections>
+                </view>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="DYV-C0-pBf">
+                    <rect key="frame" x="10" y="110" width="355" height="557"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="nNE-mz-S40">
+                        <size key="itemSize" width="355" height="128"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="10" maxX="0.0" maxY="10"/>
+                    </collectionViewFlowLayout>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="Zqy-9P-qEi"/>
+                        <outlet property="delegate" destination="-1" id="vBs-a8-AzH"/>
+                    </connections>
+                </collectionView>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sJb-cx-hLa">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="44" id="oWN-6e-f5c"/>
+                    </constraints>
+                    <items>
+                        <barButtonItem title="Export" id="3u2-EG-b3L">
+                            <connections>
+                                <action selector="exportData:" destination="-1" id="xF4-hx-r10"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="zZ7-kg-iMw"/>
+                        <barButtonItem title="Filter" id="Rrt-Ih-dTJ" userLabel="Filter">
+                            <connections>
+                                <action selector="presentFilterViewController:" destination="-1" id="HBU-eT-bIN"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem enabled="NO" title="Reset" id="pd4-ED-5G0" userLabel="ResetFilter">
+                            <color key="tintColor" systemColor="systemRedColor"/>
+                            <connections>
+                                <action selector="resetFilter:" destination="-1" id="mQl-yY-des"/>
+                            </connections>
+                        </barButtonItem>
+                    </items>
+                </toolbar>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" red="0.20000000000000001" green="0.70980392156862748" blue="0.9137254901960784" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="DYV-C0-pBf" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="24D-kw-DFl"/>
+                <constraint firstItem="20q-sV-6nt" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="DPr-uH-JF2"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="20q-sV-6nt" secondAttribute="trailing" constant="10" id="KSs-Gj-FzZ"/>
+                <constraint firstItem="sJb-cx-hLa" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="bm6-fc-MDp"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="sJb-cx-hLa" secondAttribute="trailing" id="hSy-GE-rB5"/>
+                <constraint firstItem="20q-sV-6nt" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="60" id="iDG-kd-DFg"/>
+                <constraint firstItem="DYV-C0-pBf" firstAttribute="top" secondItem="20q-sV-6nt" secondAttribute="bottom" constant="10" id="kV2-Wh-h1k"/>
+                <constraint firstItem="sJb-cx-hLa" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="tZn-fP-IK0"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="DYV-C0-pBf" secondAttribute="bottom" id="xcg-6g-qae"/>
+                <constraint firstItem="DYV-C0-pBf" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" constant="-10" id="xtL-HZ-P3B"/>
+            </constraints>
+            <point key="canvasLocation" x="138.40000000000001" y="152.47376311844079"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemRedColor">
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

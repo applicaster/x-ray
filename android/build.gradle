@@ -6,21 +6,35 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.0.0"
+        classpath "com.android.tools.build:gradle:4.0.1"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5'
     }
 }
 
 allprojects {
     repositories {
+        maven {
+            url "../../node_modules/react-native/android"
+        }
         google()
         jcenter()
+        maven {
+            credentials{
+                username System.getenv("BINTRAY_USER")
+                password System.getenv("BINTRAY_API_KEY")
+            }
+            url 'https://dl.bintray.com/applicaster-ltd/maven_plugins'
+        }
     }
-    group = 'com.applicaster.xray'
-    version = '0.0.1'
+}
+
+ext {
+    // tell subprojects to include publish scripts
+    xRayPublishing = true
 }
 
 task clean(type: Delete) {

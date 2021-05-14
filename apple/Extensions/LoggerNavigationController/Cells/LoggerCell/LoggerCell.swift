@@ -9,13 +9,17 @@
 import UIKit
 import XrayLogger
 
-class LoggerCell: UICollectionViewCell {
+public protocol LoggerCellProtocol {
+    func updateCell(event: Event,
+                    dateString: String)
+}
+
+class LoggerCell: UICollectionViewCell, LoggerCellProtocol {
     @IBOutlet weak var loggerTypeView: UIView!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var subsystemLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var logTypeLabel: UILabel!
-    @IBOutlet weak var cellWidthConstraint: NSLayoutConstraint!
 
     override func prepareForReuse() {
         messageLabel.text = ""
@@ -23,10 +27,18 @@ class LoggerCell: UICollectionViewCell {
         dateLabel.text = ""
         loggerTypeView.backgroundColor = UIColor.clear
     }
+    
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        let autoLayoutAttributes = super.preferredLayoutAttributesFitting(layoutAttributes)
+        let targetSize = CGSize(width: layoutAttributes.frame.width, height: 120)
+        let autoLayoutSize = contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: UILayoutPriority.required, verticalFittingPriority: UILayoutPriority.defaultLow)
+        let autoLayoutFrame = CGRect(origin: autoLayoutAttributes.frame.origin, size: autoLayoutSize)
+        autoLayoutAttributes.frame = autoLayoutFrame
+        return autoLayoutAttributes
+    }
 
     func updateCell(event: Event,
-                    dateString: String,
-                    width: CGFloat) {
+                    dateString: String) {
         roundCorners(radius: 10)
         messageLabel.text = event.message
         subsystemLabel.text = event.subsystem
@@ -34,7 +46,6 @@ class LoggerCell: UICollectionViewCell {
         loggerTypeView.backgroundColor = event.level.toColor()
         logTypeLabel.text = event.level.toString()
         logTypeLabel.textColor = event.level.toColor()
-        cellWidthConstraint.constant = width
     }
 }
 

@@ -32,19 +32,20 @@ class XRayLoggerBridge: NSObject, RCTBridgeModule {
             let level = eventData["level"] as? NSInteger,
             let message = eventData["message"] as? String,
             let logLevel = LogLevel(rawValue: level),
-            XrayLogger.sharedInstance.hasSinks(loggerSubsystem: subsystem,
+            Xray.sharedInstance.hasSinks(loggerSubsystem: subsystem,
                                                category: category,
                                                logLevel: logLevel) else {
             return
         }
+        let newSubsystem = "\(Bundle.main.bundleIdentifier!)/quick_brick/\(subsystem)"
         let event = Event(category: category,
-                          subsystem: subsystem,
+                          subsystem: newSubsystem,
                           timestamp: UInt(round(NSDate().timeIntervalSince1970)),
                           level: logLevel,
                           message: message,
                           data: eventData["data"] as? [String: Any],
                           context: eventData["context"] as? [String: Any],
                           exception: nil)
-        XrayLogger.sharedInstance.submit(event: event)
+        Xray.sharedInstance.submit(event: event)
     }
 }

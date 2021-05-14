@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Will be replaced on build -->
+    <string name="scheme_url_prefix">xray</string>
+    <string name="xray">xray</string>
+    <string name="tab_title_events">Current session events</string>
+    <string name="crash_reporting">Crash reporting</string>
+    <string name="show_notification">Show notification</string>
+    <string name="shortcut_access">Shortcut access</string>
+    <string name="file_log_level">File log level</string>
+    <string name="xray_lbl_tap_for_details">Tap for details…</string>
+    <string name="xray_btn_share_target_file">To file</string>
+    <string name="xray_btn_share_target_intent">To application</string>
+    <string name="xray_dlg_title_share_events">Share events</string>
+
+    <!-- https://stackoverflow.com/a/52308875 -->
+    <attr name="sink_name" format="string|reference" />
+    <attr name="file_name" format="string|reference" />
+    <!-- Numbers are values of LogLevel -->
+    <attr name="default_level" format="enum|reference" >
+        <enum name="verbose" value="0" />
+        <enum name="debug" value="1" />
+        <enum name="info" value="2" />
+        <enum name="warning" value="3" />
+        <enum name="error" value="4" />
+    </attr>
+    <declare-styleable name="EventLogFragment_MembersInjector">
+        <attr name="sink_name" />
+        <attr name="default_level" />
+    </declare-styleable>
+    <declare-styleable name="FileLogFragment_MembersInjector">
+        <attr name="file_name" />
+    </declare-styleable>
+</resources>

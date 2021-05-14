@@ -9,41 +9,75 @@
 import Foundation
 import MessageUI
 
+public protocol StorableSinkDelegate {
+    func getLogFileUrl(_ completion: ((URL?) -> Void)?)
+    func deleteLogFile()
+    func getDefaultContexts() -> [String: String]?
+}
+
 public class Reporter {
     public static let sharedInstance = Reporter()
     public private(set) static var sharedEmails: [String]?
-    public private(set) static var sharedFileURL: URL?
-    public private(set) static var sharedContexts: [String: Any]?
+    public private(set) static var sharedLogFileSinkDelegate: StorableSinkDelegate?
     var email = Email()
 
     public static func setDefaultData(emails: [String],
-                                      url: URL?,
-                                      contexts: [String: Any]?) {
+                                      logFileSinkDelegate: StorableSinkDelegate?) {
         sharedEmails = emails
-        sharedFileURL = url
-        sharedContexts = contexts
+        sharedLogFileSinkDelegate = logFileSinkDelegate
     }
 
     public static func requestSendEmail() {
         guard let sharedEmails = sharedEmails else {
-            print("Can not send email, at least one sender must be defined")
+            print("Cannot send email, at least one sender must be defined")
             return
         }
-        sharedInstance.email.requestSendEmail(emails: sharedEmails,
-                                              sharedFileURL: sharedFileURL,
-                                              contexts: sharedContexts,
-                                              attachments: nil)
+
+        guard sharedInstance.email.canSendMail() else {
+            presentAlertUnableToSendMail()
+            return
+        }
+        
+        sharedLogFileSinkDelegate?.getLogFileUrl({ url in
+            if let url = url {
+                sharedInstance.email.requestSendEmail(emails: sharedEmails,
+                                                      sharedFileURL: url,
+                                                      contexts: contexts,
+                                                      attachments: nil,
+                                                      completion: {
+                                                          sharedLogFileSinkDelegate?.deleteLogFile()
+                                                      })
+            }
+        })
     }
 
     public static func requestSendCustomEmail(attachments: [EmailAttachment]? = nil) {
         guard let emails = sharedEmails else {
-            print("Can not send email, at least one sender must be defined")
+            print("Cannot send email, at least one sender must be defined")
+            return
+        }
+        
+        guard sharedInstance.email.canSendMail() else {
+            presentAlertUnableToSendMail()
             return
         }
 
         sharedInstance.email.requestSendEmail(emails: emails,
                                               sharedFileURL: nil,
-                                              contexts: sharedContexts,
-                                              attachments: attachments)
+                                              contexts: contexts,
+                                              attachments: attachments,
+                                              completion: {
+                                                  sharedLogFileSinkDelegate?.deleteLogFile()
+                                              })
+    }
+    
+    static func presentAlertUnableToSendMail() {
+        let alert = UIAlertController(title: "Cannot send email", message: "Please check if your device has email configured", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        sharedInstance.email.presentController(vc: alert)
+    }
+    
+    static var contexts:[String: Any]? {
+        return sharedLogFileSinkDelegate?.getDefaultContexts()
     }
 }

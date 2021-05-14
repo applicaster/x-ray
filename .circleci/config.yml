@@ -1,0 +1,166 @@
+references:
+  workspace_root: &workspace_root ~/applicaster/x-ray
+  cache_file: &cache_file gradle-cache-v1-{{ checksum "android/build.gradle" }}
+  container_config: &container_config
+    working_directory: *workspace_root
+    shell: /bin/bash --login
+    resource_class: medium
+    docker:
+      - image: circleci/android:api-29-node
+    environment: &environment
+      REACT_NATIVE_VERSION: 0.62.2
+      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx6144M -XX:MaxPermSize=1024m -Xms512m -XX:+HeapDumpOnOutOfMemoryError"'
+
+version: 2
+jobs:
+
+  build_android: &build_steps
+    <<: *container_config
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: *cache_file
+
+      - run:
+          name: Install react-native from npm
+          command: npm install react-native@${REACT_NATIVE_VERSION}
+
+      - run:
+          name: Download Android Dependencies
+          working_directory: android
+          command: ./gradlew androidDependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+            - ./node_modules
+          key: *cache_file
+
+      - run:
+          name: Lint check
+          working_directory: android
+          command: ./gradlew lint
+
+      - run:
+          name: Build xray-core
+          working_directory: android
+          command: ./gradlew :xray-core:assembleRelease
+
+      - run:
+          name: Build xray-notification
+          working_directory: android
+          command: ./gradlew :xray-notification:assembleRelease
+
+      - run:
+          name: Build xray-crashreporter
+          working_directory: android
+          command: ./gradlew :xray-crashreporter:assembleRelease
+
+      - run:
+          name: Build xray-ui
+          working_directory: android
+          command: ./gradlew :xray-ui:assembleRelease
+
+      - run:
+          name: Upload Bintray
+          working_directory: android
+          command: |
+            if [ $CIRCLE_TAG ] && [ $PUBLISH_ARTIFACTS ]; then
+              ./gradlew :xray-core:bintrayUpload
+              ./gradlew :xray-notification:bintrayUpload
+              ./gradlew :xray-crashreporter:bintrayUpload
+              ./gradlew :xray-ui:bintrayUpload
+            fi
+
+  publish_bintray:
+    <<: *build_steps
+    environment:
+      <<: *environment
+      PUBLISH_ARTIFACTS: true
+
+  publish_npm:
+    <<: *container_config
+    environment:
+      <<: *environment
+      PUBLISH_ARTIFACTS: true
+
+    steps:
+      - checkout
+
+      - run:
+          name: Upload npm
+          command: |
+            if [ $CIRCLE_TAG ] && [ $PUBLISH_ARTIFACTS ]; then
+              [[ $CIRCLE_TAG =~ ^([0-9]+\.)*([0-9]+)+$ ]] ; is_release_tag=$?
+              branch_name=$(git symbolic-ref -q HEAD)
+              branch_name=${branch_name##refs/heads/}
+              branch_name=${branch_name:-HEAD}
+              if [ 'master' = $branch_name ]
+              then
+                if [[ 1 = is_release_tag ]]
+                then
+                    npx npm-shell-login
+                    npm version $CIRCLE_TAG --allow-same-version
+                    npm publish . --no-git-tag-version
+                else
+                    echo "Stable release tag expected, got alpha/beta/rc tag"
+                fi
+              else
+              if [[ 1 = is_release_tag ]]
+              then
+                    echo "alpha/beta/rc tag expected, got stable release tag"
+                else
+                    npx npm-shell-login
+                    npm version $CIRCLE_TAG --allow-same-version
+                    npm publish . --no-git-tag-version --tag next
+                fi
+              fi
+            fi
+
+
+workflows:
+  version: 2
+  test-n-deploy:
+    jobs:
+      - build_android:
+          filters:
+            tags:
+              only: /.*/
+      - hold_publish_bintray:
+          requires:
+            - build_android
+          type: approval
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - publish_bintray:
+          requires:
+            - build_android
+            - hold_publish_bintray
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - hold_publish_npm:
+          requires:
+            - build_android
+          type: approval
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
+      - publish_npm:
+          requires:
+            - build_android
+            - hold_publish_npm
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/

@@ -27,6 +27,7 @@ import Foundation
         case data
         case context
         case exception
+        case statusCode
     }
 
     init(category: String,
@@ -64,6 +65,10 @@ import Foundation
             dictionary[CodingKeys.context.rawValue] = context
         }
         return dictionary
+    }
+
+    public var networkRequestStatusCode: String? {
+        return data?[CodingKeys.statusCode.rawValue] as? String
     }
 
     public func toJSONString(options opt: JSONSerialization.WritingOptions = []) -> String? {

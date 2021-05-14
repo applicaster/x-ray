@@ -1,0 +1,39 @@
+def xrayAPI(dependencies, projectName) {
+    if (!rootProject.findProject(projectName)) {
+        dependencies.api "$project.ext.GROUP$projectName:$project.ext.releaseVersion"
+    } else {
+        dependencies.api(project(projectName))
+        // pass dependency to POM builder
+        def dependencyNode = new Node(null, 'dependency')
+        dependencyNode.appendNode('groupId', project.ext.GROUP)
+        dependencyNode.appendNode('artifactId', projectName.substring(1))
+        dependencyNode.appendNode('version', project.ext.releaseVersion)
+        project.ext.xrayDependencies += dependencyNode
+    }
+}
+
+project.ext {
+    releaseVersion = '0.0.11-alpha'
+    releaseVersionCode = 1
+    minSdkVersion = 19
+    appTargetSdkVersion = 29
+    targetSdkVersion = 29
+    compileSdkVersion = 29
+    buildToolsVersion = "29.0.3"
+    xrayAPI = this.&xrayAPI // https://stackoverflow.com/a/23290820
+
+    xrayDependencies =[]
+
+    GROUP="com.applicaster"
+    POM_URL="https://github.com/applicaster/x-ray"
+    POM_SCM_URL="https://github.com/applicaster/x-ray.git"
+    POM_SCM_CONNECTION="scm:https://github.com/applicaster/x-ray.git"
+    POM_SCM_DEV_CONNECTION="scm:https://github.com/applicaster/x-ray.git"
+    POM_LICENCE_NAME="The Apache Software License, Version 2.0"
+    POM_LICENCE_URL="http://www.apache.org/licenses/LICENSE-2.0.txt"
+    POM_LICENCE_DIST="repo"
+    POM_DEVELOPER_ID="alex"
+    POM_DEVELOPER_NAME="Aleksandr Smirnov"
+    POM_DEVELOPER_EMAIL="a.smirnov@applicaster.com"
+    ISSUE_URL="https://github.com/applicaster/x-ray/issues"
+}

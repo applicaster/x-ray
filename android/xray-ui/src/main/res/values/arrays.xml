@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="log_levels">
+        <item>@color/colorLogVerbose</item>
+        <item>@color/colorLogDebug</item>
+        <item>@color/colorLogInfo</item>
+        <item>@color/colorLogWarning</item>
+        <item>@color/colorLogError</item>
+    </array>
+
+    <array name="xray_search_masks">
+        <item>Message</item>
+        <item>Category</item>
+        <item>Subsystem</item>
+        <item>Context</item>
+        <item>Data</item>
+    </array>
+
+    <array name="xray_share_events_type">
+        <item>Filtered</item>
+        <item>All</item>
+    </array>
+
+
+</resources>
