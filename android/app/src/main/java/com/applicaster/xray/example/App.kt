@@ -26,6 +26,7 @@ class App : Application() {
 
     companion object {
         const val memory_sink_name = "memory_sink" // used in EventLogFragment sink_name field
+        private const val enableElastic = false
     }
 
     private fun initXRay() {
@@ -78,10 +79,12 @@ class App : Application() {
                 memory_sink_name,
                 InMemoryLogSink()
             )
-            .addSink("elastic", ElasticSink())
             .addSink("default_log_sink", fileLogSink)
             .addSink("error_log_sink", errorFileLogSink)
             .setFilter("error_log_sink", "", DefaultSinkFilter(LogLevel.error))
+
+        if(enableElastic)
+            Core.get().addSink("elastic", ElasticSink())
 
         val rootLogger = Logger.get()
         rootLogger.setContext(ThreadContext())
