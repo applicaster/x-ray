@@ -43,18 +43,23 @@ class XRayLoggerBridge(reactContext: ReactApplicationContext)
         Core.get().submit(event)
     }
 
-    private fun getStringSafe(eventData: ReadableMap, key: String) : String? =
-            when (val msgType = eventData.getType(key)) {
-                ReadableType.String -> eventData.getString(key)
-                ReadableType.Null -> {
-                    logger.e(NAME).message("Null was passed as $key")
-                    null
-                }
-                else -> {
-                    logger.e(NAME).message("Event field $key has wrong data type $msgType")
-                    null
-                }
+    private fun getStringSafe(eventData: ReadableMap, key: String) : String? {
+        if(!eventData.hasKey(key)) {
+            logger.e(NAME).message("Mandatory key $key is missing in the event data")
+            return null
+        }
+        return when (val msgType = eventData.getType(key)) {
+            ReadableType.String -> eventData.getString(key)
+            ReadableType.Null -> {
+                logger.e(NAME).message("Null was passed as $key")
+                null
             }
+            else -> {
+                logger.e(NAME).message("Event field $key has wrong data type $msgType")
+                null
+            }
+        }
+    }
 
     private fun optHashMap(eventData: ReadableMap, key: String): HashMap<String, Any>? {
         if (!eventData.hasKey(key)) {
