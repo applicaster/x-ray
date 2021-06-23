@@ -10,7 +10,7 @@ import XrayLogger
 
 let sortLogsStorageKey = "xrayLoggerInfoLogsSorter"
 
-protocol SortLogsViewDelegate: class {
+protocol SortLogsViewDelegate: AnyObject {
     func userPushButon(logType: LogLevel,
                        selected: Bool)
 }

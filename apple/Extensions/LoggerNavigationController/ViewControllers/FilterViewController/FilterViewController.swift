@@ -33,7 +33,7 @@ enum FilterTypes: Int {
     }
 }
 
-protocol FilterViewControllerDelegate: class {
+protocol FilterViewControllerDelegate: AnyObject {
     func userDidSaveNewFilterData(filterModels: [DataSortFilterModel])
 }
 

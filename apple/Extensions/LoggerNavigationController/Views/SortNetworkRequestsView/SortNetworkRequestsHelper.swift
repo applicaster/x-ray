@@ -11,7 +11,7 @@ import XrayLogger
 
 let sortNetworkRequestsStorageKey = "xrayLoggerInfoNetworkRequestsSorter"
 
-protocol SortNetworkRequestsViewDelegate: class {
+protocol SortNetworkRequestsViewDelegate: AnyObject {
     func userPushButton(statusCode: NetworkRequestStatusCode,
                         selected: Bool)
 }

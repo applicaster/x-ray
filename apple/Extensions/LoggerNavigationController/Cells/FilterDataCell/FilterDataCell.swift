@@ -9,7 +9,7 @@
 import UIKit
 import XrayLogger
 
-protocol FilterDataCellDelegate: class {
+protocol FilterDataCellDelegate: AnyObject {
     func cellDidUpdated(filterData: DataSortFilterModel)
 }
 
